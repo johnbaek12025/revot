@@ -12,6 +12,7 @@ django.setup()
 
 from main.models.client import Product, User, State, ProductFolder
 from main.models.clientdata import RequestTicket
+from main.models.pseudo import Purchase, Review
 from django.contrib.auth.hashers import make_password
 
 def check_state_from(state_n=0):
@@ -54,6 +55,8 @@ def make_products(user: User):
     p4.save()
     p5 = Product(pid="2190688497", mid1='35026624758', keyword='저농약 감귤, 제주 감귤, 프리미엄 감귤, 고당도 감귤, 찰보리빵 경주, 감귤', state=s, owner=user)
     p5.save()
+    
+    
 
 
 def request_tickets():
@@ -85,6 +88,6 @@ if __name__ =='__main__':
     """
     users = make_account()
     # user = User.objects.get(id=3)
-    for u in users:
-        make_products(u)
+    # for u in users:
+    #     make_products(u)
     request_tickets()

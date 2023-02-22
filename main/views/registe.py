@@ -1,12 +1,14 @@
 import json
+from tkinter import Image
 from django.http import HttpResponse
 from django.views import View
 from main.commonutility import BaseJsonFormat, check_state_from
 from main.models.client import Product
-from main.models.pseudo import Purchase
+from main.models.pseudo import Purchase, Review
 from main.views.security import ParsedClientView
 from datetime import datetime
 from django.db.models import Count
+from django.db.models import F
 
 
 class AboutPurchase(View):    
@@ -14,12 +16,11 @@ class AboutPurchase(View):
     @ParsedClientView.init_parse
     def get(self, req, p_date=None, id=None):        
         if req.resolver_match.url_name == 'date-purchase':
-            purchase_list = list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date).select_related('product'))
-            print(purchase_list)
+            purchase_list = list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date).select_related('product'))            
             data = [{
                         "reservation_date": p.reservation_date, 
-                        "reservation_at1": p.reservation_at1, 
-                        "reservation_at2": p.reservation_at2,
+                        "reservation_at": p.reservation_at, 
+                        "done_time": p.done,
                         "pid": p.product.pid,
                         "mid1": p.product.mid1,
                         "mid2": p.product.mid2, 
@@ -33,6 +34,7 @@ class AboutPurchase(View):
             data = [{
                             "reservation_date": p.reservation_date, 
                             "reservation_at": p.reservation_at, 
+                            "done_time": p.done,
                             "pid": p.product.pid, 
                             "mid1": p.product.mid1, 
                             "mid2": p.product.mid2, 
@@ -42,23 +44,35 @@ class AboutPurchase(View):
                             "options": p.product.options
                             } for p in purchase_list]
         elif req.resolver_match.url_name == 'count':
-            data = list(Purchase.objects.values('reservation_date').annotate(count=Count('id')))                        
+            data = list(Purchase.objects.values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
+            print(Purchase.objects.values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')).query)
         res = BaseJsonFormat(is_success=True, data=data)
         return HttpResponse(res, content_type="application/json", status=200)
     
     @ParsedClientView.init_parse
     def put(self, req):
         data = json.loads(req.body.decode('utf-8'))
+        id = data['id']
         count = data['count']
-        reservation_date = data['reservation_date'] #TODO: reservation_at -> rd1, rd2?
-        reservation_at = data['reservation_at']        
+        reservation_date = data['reservation_date']
+        #TODO: reservation_at -> rd1, rd2?
+        reservation_at = data['reservation_at']
+        try:
+            rp = Purchase.objects.get(id=id)
+        except Purchase.DoesNotExist:
+            res = BaseJsonFormat(is_success=True, msg=f"비정상 접근입니다.")
+            return HttpResponse(res, content_type="application/json", status=401)
+        rp.count = count
+        rp.reservation_date = reservation_date
+        rp.reservation_at = reservation_at
+        rp.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     
     @ParsedClientView.init_parse
     def post(self, req):
-        today = datetime.now().date()
-        data = json.loads(req.body.decode('utf-8'))
+        today = datetime.now().date()        
+        data = json.loads(req.body.decode('utf-8'))        
         product_id_list = data['product']
         reservation_date = data['reservation_date']
         #TODO: reservation_at randome으로 설정 기능
@@ -74,31 +88,38 @@ class AboutPurchase(View):
             combined_time = datetime.combine(rd, rt)
             if combined_time < datetime.now():
                 res = BaseJsonFormat(is_success=False, error_msg=f"선택된 시간이 과거 입니다.")                
-                return HttpResponse(res, content_type="application/json", status=401)     
-            
-        for p_id in product_id_list:            
+                return HttpResponse(res, content_type="application/json", status=401)
+        
+        for p_id in product_id_list:
             self._client.purchase_ticket -= 1
             if self._client.purchase_ticket < 0:
                 self._client.purchase_ticket = 0
-                self._client.save()    
+                self._client.save()
                 res = BaseJsonFormat(is_success=False, error_msg=f"추가 구매권을 구매하시기 바랍니다.")
-                return HttpResponse(res, content_type="application/json", status=401)
-            self._client.save()
+                return HttpResponse(res, content_type="application/json", status=401)            
             try:
-                p_ob = Product.objects.get(id=p_id)
+                p_ob = Product.objects.get(id=p_id, owner=self._client)
             except Product.DoesNotExist:
                 res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
                 return HttpResponse(res, content_type="application/json", status=401)
             pp = Purchase(product=p_ob, reservation_date=reservation_date, reservation_at=reservation_at, state=s, count=count)
             pp.save()
+            self._client.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     
     
     @ParsedClientView.init_parse
-    def delete(self, req):
-        ids = json.loads(req.body.decode('utf-8'))
-        
+    def delete(self, req):        
+        ids = json.loads(req.body.decode('utf-8'))['data']
+        if not ids:
+            err_msg = '비정상 접근입니다.'
+            res = BaseJsonFormat(is_success=False, error_msg=err_msg)
+            return HttpResponse(res, content_type="application/json", status=401)        
+        ids = [int(x) for x in ids]
+        s = check_state_from(0)
+        ph = Purchase.objects.filter(id__in=ids, product__owner=self._client, state=s)
+        ph.delete()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
 
@@ -117,6 +138,31 @@ class AboutReview(View):
     
     @ParsedClientView.init_parse
     def post(self, req):
+        print(self._client)
+        file = req.FILES['file']
+        data = req.POST
+        auto_fill = data['auto_fill']        
+        purchase_id = int(data['purchase'])
+        reservation_date = data['reservation_date']
+        reservation_at = data['reservation_at']
+        s = check_state_from(0)
+        
+        try:
+            po = Purchase.objects.get(id=purchase_id)
+        except Purchase.DoesNotExist:
+            res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
+            return HttpResponse(res, content_type="application/json", status=401)        
+        
+        if not auto_fill:
+            contents = data['contents']
+        else:
+            contents = None
+        img = Image(img=file)
+        r = Review(purchase=po, reservation_at=reservation_at, reservation_date=reservation_date, state=s, img=img, contents=contents)
+        
+        r.save()
+        
+        
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     

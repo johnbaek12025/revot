@@ -85,9 +85,9 @@ class AboutTicket(View):
         ids = [int(x) for x in ids]
         s = check_state_from(0)
         if req.resolver_match.url_name == 'review-ticket':            
-            rt = RequestTicket.objects.filter(id__in=ids, ticket_type='리뷰권', user=self._client, state=0)
+            rt = RequestTicket.objects.filter(id__in=ids, ticket_type='리뷰권', user=self._client, state=s)
         else:            
-            rt = RequestTicket.objects.get(id__in=ids, ticket_type='구매권', user=self._client, state=0)
+            rt = RequestTicket.objects.get(id__in=ids, ticket_type='구매권', user=self._client, state=s)
         rt.delete()
         res = BaseJsonFormat(is_success=True, msg='삭제가 완료 되었습니다.')
         return HttpResponse(res, content_type="application/json", status=200)

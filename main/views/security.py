@@ -29,7 +29,6 @@ class LoggedOut:
             # check if there is login cookie value
             login_cookie = req.COOKIES.get('login', None)
             if login_cookie:
-                print(login_cookie)
                 res = BaseJsonFormat()
                 return HttpResponse(res, content_type="application/json", status=200)
 
@@ -104,7 +103,6 @@ def get_client_object(account=None, req=None, session_birth_within=7):
         raise ValueError('account, req 둘 중 최소 하나는 입력해줘야 합니다.')
 
     if req and account is None:
-        print(req)
         try:
             login_session_value = req.COOKIES['login']
         except KeyError:

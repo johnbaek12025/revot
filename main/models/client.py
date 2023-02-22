@@ -93,4 +93,4 @@ class ProductFolder(models.Model):
     
     
 class State(models.Model):
-    state = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2)], default=0)
+    state = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(2)], default=0, verbose_name='state')
