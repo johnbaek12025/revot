@@ -106,9 +106,10 @@ class AboutProduct(View):
                 return HttpResponse(res, content_type="application/json", status=401)
             fd = FetchData(mall_name=mall_name, pid=pid)
             rest_data = fd.main()
-            # s = check_state_from(1)
-            # p = Product(pid=pid, mid1=mid1, keyword=keyword, state=s, owner=self._client, mall_name=mall_name, **rest_data)
-            # p.save()
+            print(rest_data)
+            s = check_state_from(1)
+            p = Product(pid=pid, mid1=mid1, keyword=keyword, state=s, owner=self._client, mall_name=mall_name, **rest_data)
+            p.save()
             res = BaseJsonFormat()
         elif req.resolver_match.url_name == 'product-excel':
             #TODO: excel-format -> List[Dict] and save to Product

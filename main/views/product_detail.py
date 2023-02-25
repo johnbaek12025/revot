@@ -16,7 +16,9 @@ class FetchData:
         self.session = requests.session()
         res = self.status_validation(self.url)
         options = self.extract_options_data_from(res)
-        product_data = self.extract_product_data_from(res)
+        product_dict = self.extract_product_data_from(res)
+        product_dict['options'] = options
+        return product_dict
         
     def extract_product_data_from(self, info):
         info = bs(info, 'html.parser')
@@ -39,25 +41,27 @@ class FetchData:
         color_options = data_dict["colorOptions"]
         size_options = data_dict["sizeOptions"]        
         supplements = data_dict.get('supplementProducts', None)
+        option_dict = {}
         cnt = 0
         if text_options:
             cnt += len(text_options)
-            self.extract_text_options_from(text_options)
+            option_dict.update(self.extract_text_options_from(text_options))
         if simple_options:
             cnt += len(simple_options)
-            self.extract_simple_options_from(simple_options)
+            option_dict.update(self.extract_simple_options_from(simple_options))
         if comb_options:
             cnt += len(comb_options)
-            self.extract_comb_options_from(comb_options)
+            option_dict.update(self.extract_comb_options_from(comb_options))
         if color_options:
             cnt += len(color_options)
-            self.extract_color_options_from(color_options)
+            option_dict.update(self.extract_color_options_from(color_options))
         if size_options:
             cnt += len(size_options)
-            self.extract_size_options_from(size_options)
+            option_dict.update(self.extract_size_options_from(size_options))
         if supplements:
             cnt += len(supplements)
-            self.extract_supplements_from(supplements)
+            option_dict.update(self.extract_supplements_from(supplements))
+        return {"option_count": cnt, "options": option_dict}
         
         # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_options.json')
         # options_dict = data_dict['selectedOptions']
