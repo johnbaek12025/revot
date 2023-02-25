@@ -5,6 +5,7 @@ from django.views import View
 from django.http import HttpResponse
 from main.commonutility import BaseJsonFormat, check_state_from
 from main.models.client import Product, ProductFolder, State, User
+from main.views.product_detail import FetchData
 from main.views.security import ParsedClientView
 from django.contrib.auth.hashers import make_password
 from typing import List, Dict
@@ -16,15 +17,14 @@ class RequestUserInfo(View):
     @ParsedClientView.init_parse
     def get(self, req, display=0):
         if req.resolver_match.url_name == 'update-info':
-            res = BaseJsonFormat(is_success=True, data=[self._client._user_join_data])
-        
+            res = BaseJsonFormat(is_success=True, data=[self._client._user_join_data])        
         elif req.resolver_match.url_name == 'main':
             res = BaseJsonFormat(is_success=True, data=[self._client._user_data])
         elif req.resolver_match.url_name == 'display-type':
             self._client.display_type = display
             self._client.save()
             res = BaseJsonFormat(is_success=True, data=[self._client._user_data])
-        return HttpResponse(res, content_type="application/json", status=400)
+        return HttpResponse(res, content_type="application/json", status=200)
     
     @transaction.atomic
     @ParsedClientView.init_parse        
@@ -44,7 +44,7 @@ class RequestUserInfo(View):
             res = BaseJsonFormat()
         else:
             res = BaseJsonFormat()
-        return HttpResponse(res, content_type="application/json", status=400)
+        return HttpResponse(res, content_type="application/json", status=200)
 
 
 class AboutProduct(View):
@@ -92,19 +92,27 @@ class AboutProduct(View):
     @ParsedClientView.init_parse
     def post(self, req):
         if req.resolver_match.url_name == 'product':
-            data = json.loads(req.body.decode('utf-8'))
+            data = json.loads(req.body.decode('utf-8'))            
             url = data['url']
             mid1 = data['mid']
             keyword = data['keyword']            
-            url = re.sub(r'\?.+', '', url)
-            pid = re.sub(r'[^0-9+]', '', url)
-            s = check_state_from(0)
-            p = Product(pid=pid, mid1=mid1, keyword=keyword, state=s, owner=self._client)
-            p.save()
+            match = re.match(r"https:\/\/smartstore\.naver\.com\/(\w+)\/products\/(\d+)\?*.*", url)                     
+            if match:
+                mall_name = match.group(1)
+                pid = match.group(2)
+            else:                
+                err_msg = '등록된 url을 다시 확인해주세요.'
+                res = BaseJsonFormat(is_success=False, error_msg=err_msg)
+                return HttpResponse(res, content_type="application/json", status=401)
+            fd = FetchData(mall_name=mall_name, pid=pid)
+            rest_data = fd.main()
+            # s = check_state_from(1)
+            # p = Product(pid=pid, mid1=mid1, keyword=keyword, state=s, owner=self._client, mall_name=mall_name, **rest_data)
+            # p.save()
             res = BaseJsonFormat()
         elif req.resolver_match.url_name == 'product-excel':
             #TODO: excel-format -> List[Dict] and save to Product
-            res = BaseJsonFormat()
+            res = BaseJsonFormat(is_success=True, msg='등록이 완료 되었습니다.')
         return HttpResponse(res, content_type="application/json", status=200)
     
     @transaction.atomic
