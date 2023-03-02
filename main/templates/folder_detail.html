@@ -1,0 +1,682 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}    
+<div class="review_top">
+    <h1>{{folder_name}}</h1>
+    <div class="dropdown">
+        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{%static 'img/i_download.svg'%}" alt="down">
+            <span>Export</span>
+            <img src="{%static 'img/i_down_3.svg'%}" alt="">
+        </button>
+        <ul class="dropdown-menu">
+            {%for f in folders%}                        
+            <li><a class="dropdown-item" href="#">{{f.name}}</a></li>
+            {% comment %} <li><a class="dropdown-item" href="#">폴더2</a></li> {% endcomment %}
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="button" class="btn btn_primary btn_plus" data-bs-toggle="modal"
+    data-bs-target="#exampleModalToggle">
+        <img src="{%static 'img/i_plus.svg'%}" alt="">
+    </button>
+</div>
+<div class="row">
+    <div class="col-12">
+        <ul class="nav nav_tabs type2" id="review_tab" role="reviewtab">
+            <li class="nav_item" role="presentation">
+                <button class="nav_link active" id="all_tab" data-bs-toggle="pill" data-bs-target="#all"
+                    type="button" role="presentation" aria-controls="all"
+                    aria-selected="true">전체<span>999</span></button>
+            </li>
+            <li class="nav_item" role="presentation">
+                <button class="nav_link" id="complete_tab" data-bs-toggle="pill"
+                    data-bs-target="#complete" type="button" role="presentation"
+                    aria-controls="complete" aria-selected="false">등록완료<span>999</span></button>
+            </li>
+            <li class="nav_item" role="presentation">
+                <button class="nav_link" id="waiting_tab" data-bs-toggle="pill"
+                    data-bs-target="#waiting" type="button" role="presentation" aria-controls="waiting"
+                    aria-selected="false">등록완료<span>999</span></button>
+            </li>
+            <li class="list">
+                <button type="button">
+                    <img src="{%static 'img/i_list_on.svg'%}" alt="">
+                </button>
+            </li>
+            <li class="grid">
+                <button type="button">
+                    <img src="{%static 'img/i_grid_off.svg'%}" alt="">
+                </button>
+            </li>
+        </ul>
+        <div class="tab_content type2" id="review_tabContent">
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all_tab">
+                <div class="cont_top">
+                    <div class="search_group">
+                        <input type="search" placeholder="Search products..." />
+                        <button type="button" class="btn_search"></button>
+                    </div>
+                    <div class="dropdown">
+                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions
+                            <img src="img/i_down_3.svg" alt="">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">폴더1</a></li>
+                            <li><a class="dropdown-item" href="#">폴더2</a></li>
+                            <li><a class="dropdown-item" href="#">3</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <table class="tab_cont_table type2">
+                    <colgroup>
+                        <col style="width: 60px;">
+                        <col style="width: 150px;">
+                        <col style="width: 150px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: auto;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_all">
+                                    <label for="check_all"></label>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    제품명<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    스토어명<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    등록일<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    검색키워드<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    MID 1<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    MID2<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="table_list">
+                                    PID<button type="button" class="btn_down"></button>
+                                </div>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check_01">
+                                    <label for="check_01"></label>
+                                </div>
+                            </td>
+                            <td><span>Apple iPhone 11 Pdddddddd</span></td>
+                            <td><span>벨킨 공식 네이버 네이버</span></td>
+                            <td>2023-03-13</td>
+                            <td class="keyword">5개
+                                <div class="dropdown">
+                                    <button type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="img/i_eyes_on.svg" alt="">
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul>
+                                            <li>기획전 10종</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                            <li>컬러 5셋트 묶음</li>
+                                            <li>양말나라</li>
+                                            <li>겨울양말</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>244456312</td>
+                            <td>
+                                <div class="btn_group type2">
+                                    <button type="button" class="btn btn_xsm btn_primary">구매</button>
+                                    <button type="button" class="btn btn_xsm btn_review">리뷰</button>
+                                    <button type="button" class="btn_filter" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <img src="img/i_filter.svg" alt="필터">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                <div class="tf">
+                    <div class="dropup">
+                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">10 <img
+                                src="img/i_down_3.svg" alt=""></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">1</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#">2</a></li>
+                            <li><a class="dropdown-item" href="#">3</a></li>
+                        </ul>
+                        <p>Showing 1 - 10 of 100</p>
+                    </div>
+                    <div class="pagination">
+                        <ul>
+                            <li class="double_prev"><img src="img/i_double_prev.svg" alt=""></li>
+                            <li class="prev"><img src="img/i_prev.svg" alt=""></li>
+                            <li class="active">1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>...</li>
+                            <li>5</li>
+                            <li class="next"><img src="img/i_next.svg" alt=""></li>
+                            <li class="double_next"><img src="img/i_double_next.svg" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="complete" role="tabpanel" aria-labelledby="complete_tab">
+                3
+            </div>
+            <div class="tab-pane fade" id="waiting" role="tabpanel" aria-labelledby="waiting_tab">
+                2
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
+
+
+{% block popup %}
+    <!-- 상품 설정 팝업-->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">제품 상세보기</h5>
+        </div>
+        <div class="offcanvas-body">
+            <div class="product">
+                <img src="img/product_01.png" alt="상품이미지">
+                <div class="info">
+                    <dl>
+                        <dt>제품명 :</dt>
+                        <dd>MacBook Pro 15 Retina Touch Bar MV902</dd>
+                    </dl>
+                    <dl>
+                        <dt>스토어명 :</dt>
+                        <dd>벨킨 공식 네이버 스마트 스토어</dd>
+                    </dl>
+                    <dl>
+                        <dt>등록일 :</dt>
+                        <dd>2023-03-13</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="product_op">
+                        <h6><strong>Tage</strong>(최소 5개 이상)</h6>
+                        <div class="product_box">
+                            <ul>
+                                <li>컬러 5셋트 묶음<button type="button" class="btn_close"></button></li>
+                                <li>기획전 10종<button type="button" class="btn_close"></button></li>
+                                <li>겨울양말<button type="button" class="btn_close"></button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product_op">
+                        <h6><strong>필수 선택 옵션 종류</strong></h6>
+                        <div class="product_box type2">
+                            <ul>
+                                <li><button type="button">종류</button></li>
+                                <li><button type="button">사이즈</button></li>
+                                <li><button type="button">컬러</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product_op">
+                        <h6><strong>필수 선택 옵션 종류</strong></h6>
+                        <div class="product_box type2">
+                            <ul>
+                                <li><button type="button">양말 보관함</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>MID *</strong></h6>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>MID2(가격비교 원부)</strong></h6>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>PID</strong></h6>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>검색유입 활용</strong></h6>
+                        <div class="check_group">
+                            <input type="checkbox" id="check01">
+                            <label for="check01">상품 바로 유입</label>
+                            <input type="checkbox" id="check02">
+                            <label for="check02">검색 유입</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas-footer">
+            <div class="btn_group type3">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn_lg btn_buy"><img src="img/i_tasks.svg" alt="">구매 상세보기</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn_lg btn_buy">리뷰 상세보기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="btn_group">
+                <button type="button" class="btn btn_sm btn_primary">저장</button>
+                <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="offcanvas" aria-label="Close">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:상품 등록하기 팝업 -->
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">상품 등록하기</h5>
+                </div>
+                <div class="modal-body type2">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="input_group type2">
+                                <h6>상품 URL</h6>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="input_group type3">
+                                <h6>MID</h6>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="product_op type2">
+                                <h6>검색어</h6>
+                                <div class="product_box">
+                                    <ul>
+                                        <li>컬러 5셋트 묶음<button type="button" class="btn_close"></button></li>
+                                        <li>기획전 10종<button type="button" class="btn_close"></button></li>
+                                        <li>겨울양말<button type="button" class="btn_close"></button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn_sm btn_primary" type="button">등록</button>
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal" aria-label="Close">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+
+{% block body_bottom %}
+<script>
+    
+</script>
+{% endblock  %}

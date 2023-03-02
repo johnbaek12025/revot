@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LJ기획</title>
+
+    <link rel="stylesheet" href="{% static 'lib/bootstrap.min.css'%}">
+    <script src="{% static 'lib/bootstrap.bundle.min.js'%}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+</head>
+
+<body>
+    <section class="join">
+        <div class="join_wrap">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="login_group">
+                <h1>로그인</h1>
+                <div class="input_group">
+                    <h6>계정</h6>
+                    <input type="text" id="inputId" class='form-control' placeholder='email' required="required" name="user"/>
+                </div>
+                <div class="input_group">
+                    <h6>비밀번호</h6>
+                    <input type="password" id="inputId" class='form-control' placeholder='password' required="required" name="pwd"/>
+                    <div class="eyes"></div>
+                </div>     
+                <div class="check_group">
+                    <input type="checkbox" id="check01" name='remember_account'>
+                    <label for="check01">로그인 정보 기억하기</label>
+                </div>
+                <button type="submit" class="btn btn_primary btn_lg btn_join">로그인 하기</button> 
+                <div class="join_desc">
+                    <p>아직 계정이 없으세요? 지금 <a href="{% url 'main:join' %}">가입</a> 하세요!</p>
+                </div>            
+            </div>
+        </form>        
+        </div>
+    </section>
+
+    <script>
+        $(function () {
+
+            function getCookie(name) {
+                console.log(name)
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (var i = 0; i <sci cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+  
+            function setCookie(name, value, expHour) {
+                var date = new Date();
+                date.setTime(date.getTime() + expHour * 60 * 60 * 1000);
+                document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+            }
+            }
+        );
+    </script>
+</body>
+
+</html>

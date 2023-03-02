@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LJ기획</title>
+
+    <link rel="stylesheet" href="{% static 'lib/bootstrap.min.css'%}">
+    <script src="{% static 'lib/bootstrap.bundle.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+</head>
+
+<body>
+    <section class="join">        
+        <div class="join_wrap">
+        <form action="" method="post">               
+            <div class="join_group">
+                <h1>회원가입</h1>
+                <div class="input_group">
+                    <h6>성함</h6>
+                    <input type="text" name='name'/>
+                </div>
+                <div class="input_group">
+                    <h6>연락처</h6>
+                    <input type="text" name='phone'/>
+                </div>
+                <div class="input_group">
+                    <h6>계정</h6>
+                    <input type="text" name='account'/>
+                </div>
+                <div class="input_group">
+                    <h6>비밀번호</h6>
+                    <input type="password" name='password1'/>
+                    <div class="eyes"></div>
+                </div>
+                <div class="input_group">
+                    <h6>비밀번호 확인</h6>
+                    <input type="password" name='password2'/>
+                    <div class="eyes"></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="input_group">
+                            <h6>에이전시 코드</h6>
+                            <input type="text" name='agency_code'/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input_group">
+                            <h6>추천인 코드</h6>
+                            <input type="text" name='recommendation_code'/>
+                        </div>
+                    </div>
+                </div>
+                <div class="check_group">
+                    <input type="checkbox" id="check01">
+                    <label for="check01"><span>이용약관 및 개인정보처리방침</span>에 동의합니다.</label>
+                </div>
+                <button type="submit" class="btn btn_primary btn_lg btn_join">회원가입 하기</button> 
+                <div class="join_desc">
+                    <p>이미 계정을 갖고 계세요? 지금 <a href="{%url 'main:login'%}">로그인</a> 하세요!</p>
+                </div>
+            </div>
+        </form>
+        </div>
+    </section>
+</body>
+
+</html>

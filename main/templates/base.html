@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LJ기획</title>
+
+    <link rel="stylesheet" href="{% static 'lib/bootstrap.min.css'%}">
+    <script src="{% static 'lib/bootstrap.bundle.min.js'%}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="sidebar">
+            <div class="sidebar_logo">
+                <img src="{%static 'img/logo.svg'%}" alt=""><span>Rocket Engine LJ</span>
+            </div>
+            <ul class="sidebar_menu">
+                <li class="on">
+                    <a href="{%url 'main:main'%}"><img src="{%static 'img/i_main.svg'%}" alt="메인">메인</a>
+                    <a href="{%url 'main:mypage'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="내정보">내정보</a>
+                    <a href="{%url 'main:buy-page'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="구매">구매</a>
+                    <a href="{%url 'main:buy-schedule'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="구매 스케줄">구매 스케줄</a>
+                    <a href="{%url 'main:review-page'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="리뷰">리뷰</a>                    
+                    <a href="{%url 'main:review-schedule'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="리뷰 스케줄">리뷰 스케줄</a>
+                </li>
+            </ul>
+            <div class="sidebar_folder">
+                <p>폴더</p>
+                <div class="dropdown">
+                    <button type="button" data-bs-toggle="dropdown" aria-expanded="false">폴더 선택</button>
+                    <ul class="dropdown-menu">
+                        {%for f in folders%}                        
+                        <li><a class="dropdown-item" href="{%url 'main:folder-page' folder_id=f.id %} ">{{f.name}} 상품수: {{f.product_count}}</a></li>
+                        {% comment %} <li><a class="dropdown-item" href="#">폴더2</a></li> {% endcomment %}
+                        {% endfor %}
+                        <li><a class="dropdown-item new" href="#">새로운 폴더 생성</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_wrap">
+            
+        <header class="header">
+            <div class="sidemenu">
+                <button type="button"><img src="{%static 'img/list.svg'%}" alt="메뉴"></button>
+            </div>
+            <div class="my_group">
+                <img class="my_img" src="{%static 'img/my.png'%}" alt="프로필사진">
+                <div class="dropdown">
+                    <button type="button" data-bs-toggle="dropdown" aria-expanded="false">{{name}}</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'main:logout'%}">Logout</a></li>
+                        {% comment %} <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li> {% endcomment %}
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="review_main">            
+                {%block contents%}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    {% block popup %}
+
+    {% endblock %}
+
+    {% block body_bottom %}{% endblock  %}
+
+</body>
+
+</html>

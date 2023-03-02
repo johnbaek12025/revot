@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block page_name%}일정별로 확인{%endblock%}
+{% block contents %}
+    <div class="review_top type2 ">
+        <h1>일정별로 확인</h1>
+    </div>
+    <div class="calendar_wrap">
+        <div class="calender_top">
+            <div class="top_left">
+                <ul>
+                    <li class="prev"><img src="{%static 'img/i_arrow_left.svg'%}" alt="prev"></li>
+                    <li class="next"><img src="{%static 'img/i_arrow_right_2.svg'%}" alt="next"></li>
+                </ul>
+                <button type="button" class="today">Today</button>
+            </div>
+            <h1>September<span>2020</span></h1>
+            <div class="top_right">
+                <ul>
+                    <li class="active">Month</li>
+                    <li>Week</li>
+                    <li>Day</li>
+                </ul>
+            </div>
+        </div>
+        <div class="calender_body">
+            <div class="day">
+                <ul>
+                    <li>MONDAY</li>
+                    <li>TUESDAY</li>
+                    <li>WEDNESDAY</li>
+                    <li>THURSDAY</li>
+                    <li>FRIDAY</li>
+                    <li>SATURDAY</li>
+                    <li>SUNDAY</li>
+                </ul>
+            </div>
+            <ul class="data">
+                <li class="disable">
+                    <h2>30</h2>
+                </li>
+                <li class="disable">
+                    <h2>31</h2>
+                </li>
+                <li>
+                    <h2>1</h2>
+                </li>
+                <li>
+                    <h2>2</h2>
+                </li>
+                <li>
+                    <h2>3</h2>
+                    <dl>
+                        <dd>완료된 작업: 02</dd>
+                        <dd>처리할 작업: 14</dd>
+                    </dl>
+                </li>
+                <li>
+                    <h2>4</h2>
+                </li>
+                <li>
+                    <h2>5</h2>
+                </li>
+                <li>
+                    <h2>6</h2>
+                </li>
+                <li>
+                    <h2>7</h2>
+                </li>
+                <li class="active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight">
+                    <h2>8</h2>
+                    <dl>
+                        <dd>완료된 작업: 02</dd>
+                        <dd>처리할 작업: 14</dd>
+                    </dl>
+                </li>
+                <li>
+                    <h2>9</h2>
+                </li>
+                <li>
+                    <h2>10</h2>
+                </li>
+                <li>
+                    <h2>11</h2>
+                </li>
+                <li>
+                    <h2>12</h2>
+                </li>
+                <li>
+                    <h2>13</h2>
+                </li>
+                <li>
+                    <h2>14</h2>
+                </li>
+                <li>
+                    <h2>15</h2>
+                </li>
+                <li>
+                    <h2>16</h2>
+                </li>
+                <li>
+                    <h2>17</h2>
+                </li>
+                <li>
+                    <h2>18</h2>
+                </li>
+                <li>
+                    <h2>19</h2>
+                </li>
+                <li>
+                    <h2>20</h2>
+                </li>
+                <li>
+                    <h2>21</h2>
+                </li>
+                <li>
+                    <h2>22</h2>
+                </li>
+                <li>
+                    <h2>23</h2>
+                </li>
+                <li>
+                    <h2>24</h2>
+                </li>
+                <li>
+                    <h2>25</h2>
+                </li>
+                <li>
+                    <h2>26</h2>
+                </li>
+                <li>
+                    <h2>27</h2>
+                </li>
+                <li>
+                    <h2>28</h2>
+                </li>
+                <li>
+                    <h2>29</h2>
+                </li>
+                <li>
+                    <h2>30</h2>
+                </li>
+                <li class="disable">
+                    <h2>1</h2>
+                </li>
+                <li class="disable">
+                    <h2>2</h2>
+                </li>
+                <li class="disable">
+                    <h2>3</h2>
+                </li>
+            </ul>
+        </div>
+    </div>
+{%endblock%}    
+
+    <!-- s:삭제하기 팝업 -->
+    <div class="modal fade" id="exampleModalDelete" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">삭제 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">이 데이터를 정말 삭제하시겠습니까? 삭제 후, 다시 복구할 수 없습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                    <button class="btn btn_sm btn_buy_2" type="button">삭제하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:삭제변경하기 팝업 -->
+    <div class="modal fade" id="exampleModalState" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">삭제 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">이 데이타의 상태를 어떻게 변경하시겠습니까?</p>
+                    <div class="dropdown">
+                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions
+                            <img src="{%static 'img/i_down_3.svg'%}" alt="">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">진행중</a></li>
+                            <li><a class="dropdown-item" href="#">완료</a></li>
+                            <li><a class="dropdown-item red" href="#">중단</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                    <button class="btn btn_sm btn_buy_2" type="button">변경하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end review_sc" tabindex="-1" id="offcanvasRight"
+        aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">September, 08</h5>
+        </div>
+        <div class="offcanvas-body">
+            <div class="row">
+                <div class="col-5">
+                    <div class="review_sc_box">
+                        <ul>
+                            <li>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check01">
+                                    <label for="check01"></label>
+                                </div>
+                            </li>
+                            <li>#1</li>
+                            <li class="review_txt">
+                                <p>accountex</p>
+                                <h6>출근하기 전에 시간이 너무 촉박한데 너무 하네요.</h6>
+                                <div class="review_info">
+                                    <ul class="star">
+                                        <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                        <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                        <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                        <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                        <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                    </ul>
+                                    <span>2023-02-14</span>
+                                    <span>16:00</span>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check01">
+                                    <label for="check01"></label>
+                                </div>
+                            </li>
+                            <li>#1</li>
+                            <li class="review_txt">
+                                <h6>출근하기 전에 시간이 너무 촉박한데 너무 하네요.</h6>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check01">
+                                    <label for="check01"></label>
+                                </div>
+                            </li>
+                            <li>#1</li>
+                            <li class="review_txt">
+                                <h6>출근하기 전에 시간이 너무 촉박한데 너무 하네요.</h6>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check01">
+                                    <label for="check01"></label>
+                                </div>
+                            </li>
+                            <li>#1</li>
+                            <li class="review_txt">
+                                <h6>출근하기 전에 시간이 너무 촉박한데 너무 하네요.</h6>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <div class="check_group">
+                                    <input type="checkbox" id="check01">
+                                    <label for="check01"></label>
+                                </div>
+                            </li>
+                            <li>#1</li>
+                            <li class="review_txt">
+                                <h6>출근하기 전에 시간이 너무 촉박한데 너무 하네요.</h6>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="review_sc_box2">
+                        <div class="row">
+                            <div class="col-6">
+                                <dl>
+                                    <dt>리뷰 별점</dt>
+                                    <dd>
+                                        <ul class="star">
+                                            <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                            <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                            <li><img src="{%static 'img/i_star_on.svg'%}"></li>
+                                            <li><img src="{%static 'img/i_star_off.svg'%}"></li>
+                                            <li><img src="{%static 'img/i_star_off.svg'%}"></li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-6">
+                                <dl>
+                                    <dt>리뷰 노출 시간</dt>
+                                    <dd>
+                                        <div class="input_group_flex">
+                                            <div class="dropdown dropdown_time">
+                                                <button type="button" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">00:00</button>
+                                                <div class="dropdown-menu">
+                                                    <ul>
+                                                        <li><a class="dropdown-item check" href="#">00:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">00:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">01:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">01:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">02:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">02:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">03:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">04:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">04:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">05:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">05:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">06:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">06:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">07:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">07:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">08:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">08:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">09:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">09:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">10:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">10:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">11:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">11:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">12:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">12:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">13:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">13:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">14:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">14:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">15:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">15:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">16:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">16:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">17:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">18:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">19:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">19:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">20:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">20:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">21:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">21:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">22:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">22:30</a></li>
+                                                        <li><a class="dropdown-item" href="#">23:00</a></li>
+                                                        <li><a class="dropdown-item" href="#">23:30</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <input type="date" id="date">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-12">
+                                <dl>
+                                    <dt>리뷰</dt>
+                                    <dd>
+                                        <textarea name="" id="" cols="30" rows="10"></textarea>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-12">
+                                <dl>
+                                    <dt>리뷰 이미지</dt>
+                                    <dd>
+                                        <div class="review_img">
+                                            <img src="{%static 'img/i_upload_cloud.svg'%}" alt="업로드">
+                                            <p>Drag and Drop or <a href="#">Browse</a> to upload</p>
+                                        </div>
+                                        <div class="img_box">
+                                            <div class="review_img_list">
+                                                <img src="{%static 'img/review_img_01.png'%}" alt="">
+                                            </div>
+                                            <div class="review_img_list">
+                                                <img src="{%static 'img/review_img_01.png'%}" alt="">
+                                            </div>
+                                            <div class="review_img_list">
+                                                <img src="{%static 'img/review_img_01.png'%}" alt="">
+                                            </div>
+                                            <div class="review_img_list">
+                                                <img src="{%static 'img/review_img_01.png'%}" alt="">
+                                                <div class="btn_delete">
+                                                    <button type="button"></button>
+                                                </div>
+                                            </div>
+                                            <div class="review_img_list spinner">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn btn_primary btn_lg">리뷰 추가하기 (2/16)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

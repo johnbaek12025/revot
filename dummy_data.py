@@ -56,7 +56,9 @@ def make_products(user: User):
     p5 = Product(pid="2190688497", mid1='35026624758', keyword='저농약 감귤, 제주 감귤, 프리미엄 감귤, 고당도 감귤, 찰보리빵 경주, 감귤', state=s, owner=user)
     p5.save()
     
-    
+
+def make_folder(user: User):
+    pass
 
 
 def request_tickets():

@@ -8,7 +8,7 @@ from django.db import IntegrityError
 from django.views import View
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from main.models.client import User
+from main.models.client import ProductFolder, User
 from main.models.security import LoginSession
 from main.commonutility import BaseJsonFormat, check_state_from
 from main.views.exceptions import NotParsedError, SessionCookieNonExists, SessionExpiration, SessionValueWrong
@@ -47,10 +47,8 @@ class LoggedIn:
     def __call__(self, func):
 
         @wraps(func)
-        def wrapper(*args, **kwargs):
-
-            # get req obj
-
+        def wrapper(*args, **kwargs):            
+            # get req obj            
             req = None
             for k, v in kwargs.items():
                 if isinstance(v, HttpRequest):
@@ -75,7 +73,7 @@ class LoggedIn:
                 return res
             if client is None or not client.authorization:
                 res.delete_cookie('login')
-                res = HttpResponseRedirect(reverse('main:login'))                
+                res = HttpResponseRedirect(reverse('main:login'))
                 return res            
             
             if self.hierarchies:
@@ -90,9 +88,8 @@ class LoggedIn:
                             res = HttpResponseRedirect(reverse('main:main'))
                             return res
                     else:
-                        client_cls = client.__class__
-                        
-                        
+                        client_cls = client.__class__                        
+            
             return func(*args, **kwargs)
 
         return wrapper
@@ -160,7 +157,7 @@ class ParsedClientView(View):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._client = None        
+        self._client = None
 
     @staticmethod
     def init_parse(fun):
@@ -188,4 +185,5 @@ class ParsedClientView(View):
         if self._client is None:
             raise NotParsedError
         return self._client
+    
     

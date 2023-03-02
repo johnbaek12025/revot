@@ -1,0 +1,549 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}            
+                <div class="review_top type2 ">
+                    <h1>일정별로 확인</h1>
+                </div>
+                <div class="calendar_wrap">
+                    <div class="calender_top">
+                        <div class="top_left">
+                            <ul>
+                                <li class="prev"><img src="{%static 'img/i_arrow_left.svg'%}" alt="prev"></li>
+                                <li class="next"><img src="{%static 'img/i_arrow_right_2.svg'%}" alt="next"></li>
+                            </ul>
+                            <button type="button" class="today">Today</button>
+                        </div>
+                        <h1>September<span>2020</span></h1>
+                        <div class="top_right">
+                            <ul>
+                                <li class="active">Month</li>
+                                <li>Week</li>
+                                <li>Day</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="calender_body">
+                        <div class="day">
+                            <ul>
+                                <li>MONDAY</li>
+                                <li>TUESDAY</li>
+                                <li>WEDNESDAY</li>
+                                <li>THURSDAY</li>
+                                <li>FRIDAY</li>
+                                <li>SATURDAY</li>
+                                <li>SUNDAY</li>
+                            </ul>
+                        </div>
+                        <ul class="data">
+                            <li class="disable">
+                                <h2>30</h2>
+                            </li>
+                            <li class="disable">
+                                <h2>31</h2>
+                            </li>
+                            <li>
+                                <h2>1</h2>
+                            </li>
+                            <li>
+                                <h2>2</h2>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                                <h2>3</h2>
+                                <dl>
+                                    <dd>완료된 작업: 02</dd>
+                                    <dd>처리할 작업: 14</dd>
+                                </dl>
+                            </li>
+                            <li>
+                                <h2>4</h2>
+                            </li>
+                            <li>
+                                <h2>5</h2>
+                            </li>
+                            <li>
+                                <h2>6</h2>
+                            </li>
+                            <li>
+                                <h2>7</h2>
+                            </li>
+                            <li class="active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                aria-controls="offcanvasRight">
+                                <h2>8</h2>
+                                <dl>
+                                    <dd>완료된 작업: 02</dd>
+                                    <dd>처리할 작업: 14</dd>
+                                </dl>
+                            </li>
+                            <li>
+                                <h2>9</h2>
+                            </li>
+                            <li>
+                                <h2>10</h2>
+                            </li>
+                            <li>
+                                <h2>11</h2>
+                            </li>
+                            <li>
+                                <h2>12</h2>
+                            </li>
+                            <li>
+                                <h2>13</h2>
+                            </li>
+                            <li>
+                                <h2>14</h2>
+                            </li>
+                            <li>
+                                <h2>15</h2>
+                            </li>
+                            <li>
+                                <h2>16</h2>
+                            </li>
+                            <li>
+                                <h2>17</h2>
+                            </li>
+                            <li>
+                                <h2>18</h2>
+                            </li>
+                            <li>
+                                <h2>19</h2>
+                            </li>
+                            <li>
+                                <h2>20</h2>
+                            </li>
+                            <li>
+                                <h2>21</h2>
+                            </li>
+                            <li>
+                                <h2>22</h2>
+                            </li>
+                            <li>
+                                <h2>23</h2>
+                            </li>
+                            <li>
+                                <h2>24</h2>
+                            </li>
+                            <li>
+                                <h2>25</h2>
+                            </li>
+                            <li>
+                                <h2>26</h2>
+                            </li>
+                            <li>
+                                <h2>27</h2>
+                            </li>
+                            <li>
+                                <h2>28</h2>
+                            </li>
+                            <li>
+                                <h2>29</h2>
+                            </li>
+                            <li>
+                                <h2>30</h2>
+                            </li>
+                            <li class="disable">
+                                <h2>1</h2>
+                            </li>
+                            <li class="disable">
+                                <h2>2</h2>
+                            </li>
+                            <li class="disable">
+                                <h2>3</h2>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+{% endblock %}
+
+{% block  popup%}
+    <!-- s:삭제하기 팝업 -->
+    <div class="modal fade" id="exampleModalDelete" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">삭제 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">이 데이터를 정말 삭제하시겠습니까? 삭제 후, 다시 복구할 수 없습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                    <button class="btn btn_sm btn_buy_2" type="button">삭제하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:삭제변경하기 팝업 -->
+    <div class="modal fade" id="exampleModalState" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">삭제 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">이 데이타의 상태를 어떻게 변경하시겠습니까?</p>
+                    <div class="dropdown">
+                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions
+                            <img src="img/i_down_3.svg" alt="">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">진행중</a></li>
+                            <li><a class="dropdown-item" href="#">완료</a></li>
+                            <li><a class="dropdown-item red" href="#">중단</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                    <button class="btn btn_sm btn_buy_2" type="button">변경하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end buy_sc" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">구매내역</h5>
+            <button type="button" class="btn btn_primary btn_plus">
+                <img src="img/i_plus.svg" alt="">
+            </button>
+        </div>
+        <div class="offcanvas-body">
+            <table class="offcanvas_table">
+                <colgroup>
+                    <col style="width:10%">
+                    <col style="width:20%">
+                    <col style="width:15%">
+                    <col style="width:20%">
+                    <col style="width:20%">
+                    <col style="width:5%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>
+                            NO.
+                        </th>
+                        <th>
+                            <div class="table_list">
+                                구매한 계정<button type="button" class="btn_down"></button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="table_list">
+                                구매 시간<button type="button" class="btn_down"></button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="table_list">
+                                주문번호<button type="button" class="btn_down"></button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="table_list">
+                                주문금액<button type="button" class="btn_down"></button>
+                            </div>
+                        </th>
+                        <th></th>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>작업 완료된 계정</td>
+                        <td>
+                            <div class="dropdown type2 dropdown_time">
+                                <button type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">00:00</button>
+                                <div class="dropdown-menu">
+                                    <ul>
+                                        <li><a class="dropdown-item check" href="#">00:00</a></li>
+                                        <li><a class="dropdown-item" href="#">00:30</a></li>
+                                        <li><a class="dropdown-item" href="#">01:00</a></li>
+                                        <li><a class="dropdown-item" href="#">01:30</a></li>
+                                        <li><a class="dropdown-item" href="#">02:00</a></li>
+                                        <li><a class="dropdown-item" href="#">02:30</a></li>
+                                        <li><a class="dropdown-item" href="#">03:30</a></li>
+                                        <li><a class="dropdown-item" href="#">04:00</a></li>
+                                        <li><a class="dropdown-item" href="#">04:30</a></li>
+                                        <li><a class="dropdown-item" href="#">05:00</a></li>
+                                        <li><a class="dropdown-item" href="#">05:30</a></li>
+                                        <li><a class="dropdown-item" href="#">06:00</a></li>
+                                        <li><a class="dropdown-item" href="#">06:30</a></li>
+                                        <li><a class="dropdown-item" href="#">07:00</a></li>
+                                        <li><a class="dropdown-item" href="#">07:30</a></li>
+                                        <li><a class="dropdown-item" href="#">08:00</a></li>
+                                        <li><a class="dropdown-item" href="#">08:30</a></li>
+                                        <li><a class="dropdown-item" href="#">09:00</a></li>
+                                        <li><a class="dropdown-item" href="#">09:30</a></li>
+                                        <li><a class="dropdown-item" href="#">10:00</a></li>
+                                        <li><a class="dropdown-item" href="#">10:30</a></li>
+                                        <li><a class="dropdown-item" href="#">11:00</a></li>
+                                        <li><a class="dropdown-item" href="#">11:30</a></li>
+                                        <li><a class="dropdown-item" href="#">12:00</a></li>
+                                        <li><a class="dropdown-item" href="#">12:30</a></li>
+                                        <li><a class="dropdown-item" href="#">13:00</a></li>
+                                        <li><a class="dropdown-item" href="#">13:30</a></li>
+                                        <li><a class="dropdown-item" href="#">14:00</a></li>
+                                        <li><a class="dropdown-item" href="#">14:30</a></li>
+                                        <li><a class="dropdown-item" href="#">15:00</a></li>
+                                        <li><a class="dropdown-item" href="#">15:30</a></li>
+                                        <li><a class="dropdown-item" href="#">16:00</a></li>
+                                        <li><a class="dropdown-item" href="#">16:30</a></li>
+                                        <li><a class="dropdown-item" href="#">17:00</a></li>
+                                        <li><a class="dropdown-item" href="#">18:30</a></li>
+                                        <li><a class="dropdown-item" href="#">19:00</a></li>
+                                        <li><a class="dropdown-item" href="#">19:30</a></li>
+                                        <li><a class="dropdown-item" href="#">20:00</a></li>
+                                        <li><a class="dropdown-item" href="#">20:30</a></li>
+                                        <li><a class="dropdown-item" href="#">21:00</a></li>
+                                        <li><a class="dropdown-item" href="#">21:30</a></li>
+                                        <li><a class="dropdown-item" href="#">22:00</a></li>
+                                        <li><a class="dropdown-item" href="#">22:30</a></li>
+                                        <li><a class="dropdown-item" href="#">23:00</a></li>
+                                        <li><a class="dropdown-item" href="#">23:30</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>작업 완료된 번호</td>
+                        <td>1,987,654원</td>
+                        <td>
+                            <button type="button" class="btn_delete">
+                                <img src="img/i_delete.svg" alt="">
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>작업 완료된 계정</td>
+                        <td>
+                            <div class="dropdown type2 dropdown_time">
+                                <button type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">00:00</button>
+                                <div class="dropdown-menu">
+                                    <ul>
+                                        <li><a class="dropdown-item check" href="#">00:00</a></li>
+                                        <li><a class="dropdown-item" href="#">00:30</a></li>
+                                        <li><a class="dropdown-item" href="#">01:00</a></li>
+                                        <li><a class="dropdown-item" href="#">01:30</a></li>
+                                        <li><a class="dropdown-item" href="#">02:00</a></li>
+                                        <li><a class="dropdown-item" href="#">02:30</a></li>
+                                        <li><a class="dropdown-item" href="#">03:30</a></li>
+                                        <li><a class="dropdown-item" href="#">04:00</a></li>
+                                        <li><a class="dropdown-item" href="#">04:30</a></li>
+                                        <li><a class="dropdown-item" href="#">05:00</a></li>
+                                        <li><a class="dropdown-item" href="#">05:30</a></li>
+                                        <li><a class="dropdown-item" href="#">06:00</a></li>
+                                        <li><a class="dropdown-item" href="#">06:30</a></li>
+                                        <li><a class="dropdown-item" href="#">07:00</a></li>
+                                        <li><a class="dropdown-item" href="#">07:30</a></li>
+                                        <li><a class="dropdown-item" href="#">08:00</a></li>
+                                        <li><a class="dropdown-item" href="#">08:30</a></li>
+                                        <li><a class="dropdown-item" href="#">09:00</a></li>
+                                        <li><a class="dropdown-item" href="#">09:30</a></li>
+                                        <li><a class="dropdown-item" href="#">10:00</a></li>
+                                        <li><a class="dropdown-item" href="#">10:30</a></li>
+                                        <li><a class="dropdown-item" href="#">11:00</a></li>
+                                        <li><a class="dropdown-item" href="#">11:30</a></li>
+                                        <li><a class="dropdown-item" href="#">12:00</a></li>
+                                        <li><a class="dropdown-item" href="#">12:30</a></li>
+                                        <li><a class="dropdown-item" href="#">13:00</a></li>
+                                        <li><a class="dropdown-item" href="#">13:30</a></li>
+                                        <li><a class="dropdown-item" href="#">14:00</a></li>
+                                        <li><a class="dropdown-item" href="#">14:30</a></li>
+                                        <li><a class="dropdown-item" href="#">15:00</a></li>
+                                        <li><a class="dropdown-item" href="#">15:30</a></li>
+                                        <li><a class="dropdown-item" href="#">16:00</a></li>
+                                        <li><a class="dropdown-item" href="#">16:30</a></li>
+                                        <li><a class="dropdown-item" href="#">17:00</a></li>
+                                        <li><a class="dropdown-item" href="#">18:30</a></li>
+                                        <li><a class="dropdown-item" href="#">19:00</a></li>
+                                        <li><a class="dropdown-item" href="#">19:30</a></li>
+                                        <li><a class="dropdown-item" href="#">20:00</a></li>
+                                        <li><a class="dropdown-item" href="#">20:30</a></li>
+                                        <li><a class="dropdown-item" href="#">21:00</a></li>
+                                        <li><a class="dropdown-item" href="#">21:30</a></li>
+                                        <li><a class="dropdown-item" href="#">22:00</a></li>
+                                        <li><a class="dropdown-item" href="#">22:30</a></li>
+                                        <li><a class="dropdown-item" href="#">23:00</a></li>
+                                        <li><a class="dropdown-item" href="#">23:30</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>작업 완료된 번호</td>
+                        <td>1,987,654원</td>
+                        <td>
+                            <button type="button" class="btn_delete">
+                                <img src="img/i_delete.svg" alt="">
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <!-- s:상품 등록하기 팝업 -->
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">시간 또는 수량 변경하기</h5>
+                </div>
+                <div class="modal-body type2">
+                    <div class="row mb_20">
+                        <div class="col-12">
+                            <div class="input_group">
+                                <h6 class="input_tit">노출 시간 변경하기</h6>
+                                <div class="input_group_flex type2">
+                                    <div class="dropdown dropdown_time">
+                                        <button type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">00:00</button>
+                                        <div class="dropdown-menu">
+                                            <ul>
+                                                <li><a class="dropdown-item check" href="#">00:00</a></li>
+                                                <li><a class="dropdown-item" href="#">00:30</a></li>
+                                                <li><a class="dropdown-item" href="#">01:00</a></li>
+                                                <li><a class="dropdown-item" href="#">01:30</a></li>
+                                                <li><a class="dropdown-item" href="#">02:00</a></li>
+                                                <li><a class="dropdown-item" href="#">02:30</a></li>
+                                                <li><a class="dropdown-item" href="#">03:30</a></li>
+                                                <li><a class="dropdown-item" href="#">04:00</a></li>
+                                                <li><a class="dropdown-item" href="#">04:30</a></li>
+                                                <li><a class="dropdown-item" href="#">05:00</a></li>
+                                                <li><a class="dropdown-item" href="#">05:30</a></li>
+                                                <li><a class="dropdown-item" href="#">06:00</a></li>
+                                                <li><a class="dropdown-item" href="#">06:30</a></li>
+                                                <li><a class="dropdown-item" href="#">07:00</a></li>
+                                                <li><a class="dropdown-item" href="#">07:30</a></li>
+                                                <li><a class="dropdown-item" href="#">08:00</a></li>
+                                                <li><a class="dropdown-item" href="#">08:30</a></li>
+                                                <li><a class="dropdown-item" href="#">09:00</a></li>
+                                                <li><a class="dropdown-item" href="#">09:30</a></li>
+                                                <li><a class="dropdown-item" href="#">10:00</a></li>
+                                                <li><a class="dropdown-item" href="#">10:30</a></li>
+                                                <li><a class="dropdown-item" href="#">11:00</a></li>
+                                                <li><a class="dropdown-item" href="#">11:30</a></li>
+                                                <li><a class="dropdown-item" href="#">12:00</a></li>
+                                                <li><a class="dropdown-item" href="#">12:30</a></li>
+                                                <li><a class="dropdown-item" href="#">13:00</a></li>
+                                                <li><a class="dropdown-item" href="#">13:30</a></li>
+                                                <li><a class="dropdown-item" href="#">14:00</a></li>
+                                                <li><a class="dropdown-item" href="#">14:30</a></li>
+                                                <li><a class="dropdown-item" href="#">15:00</a></li>
+                                                <li><a class="dropdown-item" href="#">15:30</a></li>
+                                                <li><a class="dropdown-item" href="#">16:00</a></li>
+                                                <li><a class="dropdown-item" href="#">16:30</a></li>
+                                                <li><a class="dropdown-item" href="#">17:00</a></li>
+                                                <li><a class="dropdown-item" href="#">18:30</a></li>
+                                                <li><a class="dropdown-item" href="#">19:00</a></li>
+                                                <li><a class="dropdown-item" href="#">19:30</a></li>
+                                                <li><a class="dropdown-item" href="#">20:00</a></li>
+                                                <li><a class="dropdown-item" href="#">20:30</a></li>
+                                                <li><a class="dropdown-item" href="#">21:00</a></li>
+                                                <li><a class="dropdown-item" href="#">21:30</a></li>
+                                                <li><a class="dropdown-item" href="#">22:00</a></li>
+                                                <li><a class="dropdown-item" href="#">22:30</a></li>
+                                                <li><a class="dropdown-item" href="#">23:00</a></li>
+                                                <li><a class="dropdown-item" href="#">23:30</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <input type="date">
+                                    <span>~</span>
+                                    <div class="dropdown dropdown_time">
+                                        <button type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">00:00</button>
+                                        <div class="dropdown-menu">
+                                            <ul>
+                                                <li><a class="dropdown-item check" href="#">00:00</a></li>
+                                                <li><a class="dropdown-item" href="#">00:30</a></li>
+                                                <li><a class="dropdown-item" href="#">01:00</a></li>
+                                                <li><a class="dropdown-item" href="#">01:30</a></li>
+                                                <li><a class="dropdown-item" href="#">02:00</a></li>
+                                                <li><a class="dropdown-item" href="#">02:30</a></li>
+                                                <li><a class="dropdown-item" href="#">03:30</a></li>
+                                                <li><a class="dropdown-item" href="#">04:00</a></li>
+                                                <li><a class="dropdown-item" href="#">04:30</a></li>
+                                                <li><a class="dropdown-item" href="#">05:00</a></li>
+                                                <li><a class="dropdown-item" href="#">05:30</a></li>
+                                                <li><a class="dropdown-item" href="#">06:00</a></li>
+                                                <li><a class="dropdown-item" href="#">06:30</a></li>
+                                                <li><a class="dropdown-item" href="#">07:00</a></li>
+                                                <li><a class="dropdown-item" href="#">07:30</a></li>
+                                                <li><a class="dropdown-item" href="#">08:00</a></li>
+                                                <li><a class="dropdown-item" href="#">08:30</a></li>
+                                                <li><a class="dropdown-item" href="#">09:00</a></li>
+                                                <li><a class="dropdown-item" href="#">09:30</a></li>
+                                                <li><a class="dropdown-item" href="#">10:00</a></li>
+                                                <li><a class="dropdown-item" href="#">10:30</a></li>
+                                                <li><a class="dropdown-item" href="#">11:00</a></li>
+                                                <li><a class="dropdown-item" href="#">11:30</a></li>
+                                                <li><a class="dropdown-item" href="#">12:00</a></li>
+                                                <li><a class="dropdown-item" href="#">12:30</a></li>
+                                                <li><a class="dropdown-item" href="#">13:00</a></li>
+                                                <li><a class="dropdown-item" href="#">13:30</a></li>
+                                                <li><a class="dropdown-item" href="#">14:00</a></li>
+                                                <li><a class="dropdown-item" href="#">14:30</a></li>
+                                                <li><a class="dropdown-item" href="#">15:00</a></li>
+                                                <li><a class="dropdown-item" href="#">15:30</a></li>
+                                                <li><a class="dropdown-item" href="#">16:00</a></li>
+                                                <li><a class="dropdown-item" href="#">16:30</a></li>
+                                                <li><a class="dropdown-item" href="#">17:00</a></li>
+                                                <li><a class="dropdown-item" href="#">18:30</a></li>
+                                                <li><a class="dropdown-item" href="#">19:00</a></li>
+                                                <li><a class="dropdown-item" href="#">19:30</a></li>
+                                                <li><a class="dropdown-item" href="#">20:00</a></li>
+                                                <li><a class="dropdown-item" href="#">20:30</a></li>
+                                                <li><a class="dropdown-item" href="#">21:00</a></li>
+                                                <li><a class="dropdown-item" href="#">21:30</a></li>
+                                                <li><a class="dropdown-item" href="#">22:00</a></li>
+                                                <li><a class="dropdown-item" href="#">22:30</a></li>
+                                                <li><a class="dropdown-item" href="#">23:00</a></li>
+                                                <li><a class="dropdown-item" href="#">23:30</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <input type="date" id="date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row_op">
+                        <div class="col-5">
+                            <div class="input_group">
+                                <h6 class="input_tit">현재 설정된 구매 수량</h6>
+                                <div class="input_group">
+                                    <input type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <span><img class="i_arrow_right" src="img/i_arrow_right.svg" alt=""></span>
+                        </div>
+                        <div class="col-5">
+                            <div class="input_group">
+                                <h6 class="input_tit">현재 설정된 구매 수량</h6>
+                                <div class="input_group">
+                                    <input type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                        <button class="btn btn_sm btn_buy" type="button">변경하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}

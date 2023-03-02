@@ -1,0 +1,459 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}            
+                <div class="review_top">
+                    <h1>메인</h1>
+                    <div class="dropdown">
+                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="img/i_download.svg" alt="down">
+                            <span>Export</span>
+                            <img src="img/i_down_3.svg" alt="">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">폴더1</a></li>
+                            <li><a class="dropdown-item" href="#">폴더2</a></li>
+                            <li><a class="dropdown-item new" href="#">새로운 폴더 생성</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn_primary btn_plus" data-bs-toggle="modal"
+                        data-bs-target="#exampleModalToggle">
+                        <img src="img/i_plus.svg" alt="">
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="nav nav_tabs type2" id="review_tab" role="reviewtab">
+                            <li class="nav_item" role="presentation">
+                                <button class="nav_link active" id="all_tab" data-bs-toggle="pill" data-bs-target="#all"
+                                    type="button" role="presentation" aria-controls="all"
+                                    aria-selected="true">전체<span>100</span></button>
+                            </li>
+                            <li class="nav_item" role="presentation">
+                                <button class="nav_link" id="complete_tab" data-bs-toggle="pill"
+                                    data-bs-target="#complete" type="button" role="presentation"
+                                    aria-controls="complete" aria-selected="false">등록완료<span>100</span></button>
+                            </li>
+                            <li class="nav_item" role="presentation">
+                                <button class="nav_link" id="waiting_tab" data-bs-toggle="pill"
+                                    data-bs-target="#waiting" type="button" role="presentation" aria-controls="waiting"
+                                    aria-selected="false">등록실패<span>0</span></button>
+                            </li>
+                            <li class="list">
+                                <button>
+                                <a type="button" href="{%url 'main:main'%}">
+                                    <img src="{%static 'img/i_list_off.svg'%}" alt="">
+                                </a>
+                                </button>
+                            </li>
+                            <li class="grid">
+                                <button>
+                                <a type="button">
+                                    <img src="{%static 'img/i_grid_on.svg'%}" alt="">
+                                </a>
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab_content type2" id="review_tabContent">
+                            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all_tab">
+                                <div class="cont_top">
+                                    <div class="search_group">
+                                        <input type="search" placeholder="Search products..." />
+                                        <button type="button" class="btn_search"></button>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions
+                                            <img src="img/i_down_3.svg" alt="">
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#">폴더1</a></li>
+                                            <li><a class="dropdown-item" href="#">폴더2</a></li>
+                                            <li><a class="dropdown-item" href="#">3</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                                <div class="row product_list">
+                                    <div class="col-3">
+                                        <div class="product_item active">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalParameter">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalMatching">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalProductY">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                            <div class="check_group type2">
+                                                <input type="checkbox" id="check01">
+                                                <label for="check01"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="product_item">
+                                            <img src="img/product_01.png" alt="상품이미지">
+                                            <div class="product_info">
+                                                <h4>Apple iPhone 11 Pro Max256GB Space Gray</h4>
+                                                <p>벨킨 공식 네이버 스마트스토어</p>
+                                            </div>
+                                            <div class="product_btn">
+                                                <button type="button" class="btn btn_lg btn_primary">구매</button>
+                                                <button type="button" class="btn btn_lg btn_review ml_8">리뷰</button>
+                                                <button type="button" class="btn_filter ml_8" data-bs-toggle="offcanvas"
+                                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                                    <img src="img/i_filter.svg" alt="필터"></button>
+                                                <button type="button" class="btn_delete ml_8">
+                                                    <img src="img/i_delete.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="complete" role="tabpanel" aria-labelledby="complete_tab">
+                                3
+                            </div>
+                            <div class="tab-pane fade" id="waiting" role="tabpanel" aria-labelledby="waiting_tab">
+                                2
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+
+{% endblock  %}
+
+{% block popup %}
+    <!-- 상품 설정 팝업-->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">제품 상세보기</h5>
+        </div>
+        <div class="offcanvas-body">
+            <div class="product">
+                <img src="img/product_01.png" alt="상품이미지">
+                <div class="info">
+                    <dl>
+                        <dt>제품명 :</dt>
+                        <dd>MacBook Pro 15 Retina Touch Bar MV902</dd>
+                    </dl>
+                    <dl>
+                        <dt>스토어명 :</dt>
+                        <dd>벨킨 공식 네이버 스마트 스토어</dd>
+                    </dl>
+                    <dl>
+                        <dt>등록일 :</dt>
+                        <dd>2023-03-13</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="product_op">
+                        <h6><strong>Tage</strong>(최소 5개 이상)</h6>
+                        <div class="product_box">
+                            <ul>
+                                <li>컬러 5셋트 묶음<button type="button" class="btn_close"></button></li>
+                                <li>기획전 10종<button type="button" class="btn_close"></button></li>
+                                <li>겨울양말<button type="button" class="btn_close"></button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product_op">
+                        <h6><strong>필수 선택 옵션 종류</strong></h6>
+                        <div class="product_box type2">
+                            <ul>
+                                <li><button type="button">종류</button></li>
+                                <li><button type="button">사이즈</button></li>
+                                <li><button type="button">컬러</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product_op">
+                        <h6><strong>필수 선택 옵션 종류</strong></h6>
+                        <div class="product_box type2">
+                            <ul>
+                                <li><button type="button">양말 보관함</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>MID *</strong></h6>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>MID2(가격비교 원부)</strong></h6>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>PID</strong></h6>
+                        <input type="text" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_op">
+                        <h6><strong>검색유입 활용</strong></h6>
+                        <div class="check_group">
+                            <input type="checkbox" id="check01">
+                            <label for="check01">상품 바로 유입</label>
+                            <input type="checkbox" id="check02">
+                            <label for="check02">검색 유입</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas-footer">
+            <div class="btn_group type3">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn_lg btn_buy"><img src="img/i_tasks.svg" alt="">구매
+                            상세보기</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn_lg btn_buy">리뷰 상세보기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="btn_group">
+                <button type="button" class="btn btn_sm btn_primary">저장</button>
+                <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="offcanvas"
+                    aria-label="Close">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:상품 등록하기 팝업 -->
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">상품 등록하기</h5>
+                </div>
+                <div class="modal-body type2">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="input_group type2">
+                                <h6>상품 URL</h6>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="input_group type3">
+                                <h6>MID</h6>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="product_op type2">
+                                <h6>검색어</h6>
+                                <div class="product_box">
+                                    <ul>
+                                        <li>컬러 5셋트 묶음<button type="button" class="btn_close"></button></li>
+                                        <li>기획전 10종<button type="button" class="btn_close"></button></li>
+                                        <li>겨울양말<button type="button" class="btn_close"></button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn_sm btn_primary" type="button">등록</button>
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:파라미터값 확인 팝업 -->
+    <div class="modal fade" id="exampleModalParameter" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">파라미터값 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">상품 URL 파라미터값이 잘못되었습니다. 다시 입력하십시오</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn_sm btn_buy" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:상품 정보 매칭중 팝업 -->
+    <div class="modal fade" id="exampleModalMatching" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered matching">
+            <div class="modal-content">
+                <div class="modal-body type2">
+                    <div class="matching_box">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                        <div class="matching_message">
+                            <h1>상품 정보 매칭중</h1>
+                            <p>상품 정보를 매칭하고 있습니다.<br>매칭이 끝나면 이 안내창은 자동으로 닫힙니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- s:상품등록완료 팝업 -->
+    <div class="modal fade" id="exampleModalProductY" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">상품등록 완료</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">상품 등록이 완료되었습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn_sm btn_buy" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

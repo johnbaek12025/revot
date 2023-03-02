@@ -1,6 +1,7 @@
 from django.urls import path
 from main.models.client import User
-from main.views.clientdata import AboutProduct, RequestUserInfo, AboutFolder
+from main.views.clientdata import AboutProduct, ProductData, RequestUserInfo, AboutFolder
+from main.views.pageviews import MainPage, MainPageGrid, MyPage, PurchaseMainPage, PurchaseSchedulePage, ReviewPage, ReviewSchedulePage
 from main.views.registe import AboutPurchase, AboutReview
 from main.views.ticket import AboutTicket
 from main.views.join import JoinPage
@@ -11,17 +12,29 @@ from main.views.security import LoggedIn, LoggedOut
 app_name = 'main'
 
 urlpatterns = [    
+    path('', LoggedOut()(LogIn.as_view(http_method_names=['get', 'post'])), name='login'),
     path('join/', LoggedOut()(JoinPage.as_view(http_method_names=['get', 'post'])), name='join'),
-    path('login/', LoggedOut()(LogIn.as_view(http_method_names=['get', 'post'])), name='login'),
     path('logout/', LoggedIn()(LogOut.as_view(http_method_names=['get'])), name='logout'),
-    path('user/info/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get', 'put'])), name='update-info'),
-    path('user/info/<int:display>/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='display-type'),
-    path('main/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='main'),
-    path('user/product/', LoggedIn()(AboutProduct.as_view(http_method_names=['get', 'put','post'])), name='product'),
+    path('mypage/', LoggedIn()(MyPage.as_view(http_method_names=['get'])), name='mypage'),
+    path('mainpage/', LoggedIn()(MainPage.as_view(http_method_names=['get'])), name='main'),
+    path('mainpage/grid/', LoggedIn()(MainPageGrid.as_view(http_method_names=['get'])), name='main-grid'),
+    path('buypage/', LoggedIn()(PurchaseMainPage.as_view(http_method_names=['get'])), name='buy-page'),
+    path('buypage/schecule/', LoggedIn()(PurchaseSchedulePage.as_view(http_method_names=['get'])), name='buy-schedule'),
+    path('reviewpage/', LoggedIn()(ReviewPage.as_view(http_method_names=['get'])), name='review-page'),
+    path('reviewpage/schedule/', LoggedIn()(ReviewSchedulePage.as_view(http_method_names=['get'])), name='review-schedule'),
+    path('mainpage/<int:folder_id>/', LoggedIn()(MainPage.as_view(http_method_names=['get'])), name='folder-page'),
+    
+    
+    path('user/info/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get', 'put'])), name='my-data'),
+    path('user/info/<int:display>/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='display-type'),        
+    path('user/newfolder/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='new-folder'),
+    path('user/product/', LoggedIn()(ProductData.as_view(http_method_names=['get'])), name='product-all'),
+    path('user/product/', LoggedIn()(ProductData.as_view(http_method_names=['get','put','post'])), name='product-all'),
     path('user/product/delete/', AboutProduct.as_view(http_method_names=['delete']), name='product-delete'),
-    path('user/product/count/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-count'),
-    path('user/product/excel/', LoggedIn()(AboutProduct.as_view(http_method_names=['post'])), name='product-excel'),
-    path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['get', 'put', 'post'])), name='folder'),
+    path('user/product/count/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product'),
+    # path('user/product/excel/', LoggedIn()(AboutProduct.as_view(http_method_names=['post'])), name='product-excel'),
+    path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['get', 'put'])), name='folder'),
+    
     path('user/folder/detail/<int:folder_id>/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-detail'),
     path('user/folder/delete/', LoggedIn()(AboutFolder.as_view(http_method_names=['delete'])), name='folder-delete'),
     path('history/review/request/', LoggedIn()(AboutTicket.as_view(http_method_names=['get', 'put'])), name='review-ticket'),

@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block  contents%}
+<div class="review_top">
+    <h1>구매</h1>
+    <div class="dropdown">
+        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{%static 'img/i_download.svg'%}" alt="down">
+            <span>Export</span>
+            <img src="{%static 'img/i_down_3.svg'%}" alt="">
+        </button>
+        <ul class="dropdown-menu">
+            {%for f in folders%}                        
+            <li><a class="dropdown-item" href="#">{{f.name}}</a></li>
+            {% comment %} <li><a class="dropdown-item" href="#">폴더2</a></li> {% endcomment %}
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="button" class="btn btn_primary btn_plus" data-bs-toggle="modal"
+    data-bs-target="#exampleModalToggle">
+        <img src="{%static 'img/i_plus.svg'%}" alt="">
+    </button>
+</div>  
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav_tabs type2" id="review_tab" role="reviewtab">
+                <li class="nav_item" role="presentation">
+                    <button class="nav_link active" id="all_tab" data-bs-toggle="pill" data-bs-target="#all"
+                        type="button" role="presentation" aria-controls="all"
+                        aria-selected="true">전체<span>999</span></button>
+                </li>
+                <li class="nav_item" role="presentation">
+                    <button class="nav_link" id="progress_tab" data-bs-toggle="pill"
+                        data-bs-target="#progress" type="button" role="presentation"
+                        aria-controls="progress" aria-selected="false">진행중<span>999</span></button>
+                </li>
+                <li class="nav_item" role="presentation">
+                    <button class="nav_link" id="complete_tab" data-bs-toggle="pill"
+                        data-bs-target="#complete" type="button" role="presentation"
+                        aria-controls="complete" aria-selected="false">완료<span>999</span></button>
+                </li>
+                <li class="nav_item" role="presentation">
+                    <button class="nav_link" id="stop_tab" data-bs-toggle="pill" data-bs-target="#stop"
+                        type="button" role="presentation" aria-controls="review"
+                        aria-selected="false">중단<span>999</span></button>
+                </li>
+            </ul>
+            <div class="tab_content type2" id="review_tabContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all_tab">
+                    <div class="cont_top">
+                        <div class="search_group">
+                            <input type="search" placeholder="Search products..." />
+                            <button type="button" class="btn_search"></button>
+                            <button type="button" class="btn_filter"></button>
+                        </div>
+                        <div class="dropdown">
+                            <button type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions
+                                <img src="img/i_down_3.svg" alt="">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModalDelete"><img src="img/i_delete_2.svg"
+                                            alt="">삭제하기</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModalState"><img src="img/i_smail.svg"
+                                            alt="">상태 변경하기</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <table class="tab_cont_table type3">
+                        <colgroup>
+                            <col style="width: 60px;">
+                            <col style="width: 100px;">
+                            <col style="width: 150px;">
+                            <col style="width: 150px;">
+                            <col style="width: 100px;">
+                            <col style="width: 150px;">
+                            <col style="width: 150px;">
+                            <col style="width: auto;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="check_group">
+                                        <input type="checkbox" id="check_all">
+                                        <label for="check_all"></label>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        건수<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        진행율<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        시작일<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        완료일<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        1회 구매시 구매수량<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        옵션<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_list">
+                                        상태<button type="button" class="btn_down"></button>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="check_group">
+                                        <input type="checkbox" id="check_01">
+                                        <label for="check_01"></label>
+                                    </div>
+                                </td>
+                                <td>100/100</td>
+                                <td>100%</td>
+                                <td>2023-02-14</td>
+                                <td>2023-03-13</td>
+                                <td>1</td>
+                                <td><span>색상 : 스페이스 그레이 ㅇㅇㅇㅇ</span></td>
+                                <td>
+                                    <div class="status_group">
+                                        <span class="default">완료</span>
+                                        <div class="dropdown">
+                                            <button type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><img src="img/i_more.svg"
+                                                    alt=""></button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item check" href="#">대기중</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">완료</a></li>
+                                                <li><a class="dropdown-item" href="#">거절</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="check_group">
+                                        <input type="checkbox" id="check_01">
+                                        <label for="check_01"></label>
+                                    </div>
+                                </td>
+                                <td>100/100</td>
+                                <td>100%</td>
+                                <td>2023-02-14</td>
+                                <td>2023-03-13</td>
+                                <td>1</td>
+                                <td><span>색상 : 스페이스 그레이 ㅇㅇㅇㅇ</span></td>
+                                <td>
+                                    <div class="status_group">
+                                        <span class="default">완료</span>
+                                        <div class="dropdown">
+                                            <button type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><img src="img/i_more.svg"
+                                                    alt=""></button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item check" href="#">대기중</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">완료</a></li>
+                                                <li><a class="dropdown-item" href="#">거절</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="check_group">
+                                        <input type="checkbox" id="check_01">
+                                        <label for="check_01"></label>
+                                    </div>
+                                </td>
+                                <td>100/100</td>
+                                <td>100%</td>
+                                <td>2023-02-14</td>
+                                <td>2023-03-13</td>
+                                <td>1</td>
+                                <td><span>색상 : 스페이스 그레이 ㅇㅇㅇㅇ</span></td>
+                                <td>
+                                    <div class="status_group">
+                                        <span class="default">진행중</span>
+                                        <div class="dropdown">
+                                            <button type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false"><img src="img/i_more.svg"
+                                                    alt=""></button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item check" href="#">대기중</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">완료</a></li>
+                                                <li><a class="dropdown-item" href="#">거절</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="tf">
+                        <div class="dropup">
+                            <button type="button" data-bs-toggle="dropdown" aria-expanded="false">10 <img
+                                    src="img/i_down_3.svg" alt=""></button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">1</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#">2</a></li>
+                                <li><a class="dropdown-item" href="#">3</a></li>
+                            </ul>
+                            <p>Showing 1 - 10 of 100</p>
+                        </div>
+                        <div class="pagination">
+                            <ul>
+                                <li class="double_prev"><img src="img/i_double_prev.svg" alt=""></li>
+                                <li class="prev"><img src="img/i_prev.svg" alt=""></li>
+                                <li class="active">1</li>
+                                <li>2</li>
+                                <li>3</li>
+                                <li>...</li>
+                                <li>5</li>
+                                <li class="next"><img src="img/i_next.svg" alt=""></li>
+                                <li class="double_next"><img src="img/i_double_next.svg" alt=""></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="progress" role="tabpanel" aria-labelledby="progress_tab">
+                    2
+                </div>
+                <div class="tab-pane fade" id="complete" role="tabpanel" aria-labelledby="complete_tab">
+                    3
+                </div>
+                <div class="tab-pane fade" id="stop" role="tabpanel" aria-labelledby="stop_tab">
+                    4
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+
+{% block  popup%}
+    <!-- s:삭제하기 팝업 -->
+    <div class="modal fade" id="exampleModalDelete" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">삭제 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">이 데이터를 정말 삭제하시겠습니까? 삭제 후, 다시 복구할 수 없습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                    <button class="btn btn_sm btn_buy_2" type="button">삭제하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- s:삭제변경하기 팝업 -->
+    <div class="modal fade" id="exampleModalState" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">삭제 확인</h5>
+                </div>
+                <div class="modal-body type2">
+                    <p class="delete_message">이 데이타의 상태를 어떻게 변경하시겠습니까?</p>
+                    <div class="dropdown">
+                        <button type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions
+                            <img src="img/i_down_3.svg" alt="">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">진행중</a></li>
+                            <li><a class="dropdown-item" href="#">완료</a></li>
+                            <li><a class="dropdown-item red" href="#">중단</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn_sm btn_cancel" data-bs-dismiss="modal"
+                        aria-label="Close">취소</button>
+                    <button class="btn btn_sm btn_buy_2" type="button">변경하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock  %}

@@ -62,7 +62,7 @@ class Product(models.Model):
     price = models.CharField(max_length=100, null=True, blank=True, default=None)
     @property
     def _product_data(self):
-        return {"id": self.id, "pid": self.pid, "mid1": self.mid1, "keyword": self.keyword, "state": self.state.state}
+        return {"id": self.id, "pid": self.pid, "mid1": self.mid1, "keyword": self.keyword}
 
 
 class ProductFolder(models.Model):

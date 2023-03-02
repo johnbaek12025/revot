@@ -61,7 +61,7 @@ class FetchData:
         if supplements:
             cnt += len(supplements)
             option_dict.update(self.extract_supplements_from(supplements))
-        return {"option_count": cnt, "options": option_dict}
+        return json.dumps({"option_count": cnt, "options": option_dict})
         
         # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_options.json')
         # options_dict = data_dict['selectedOptions']
