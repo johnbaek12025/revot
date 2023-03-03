@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import json
+
+from barley.setting import get_database_info, get_debug_database_info
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,13 +23,40 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rhsofd=7%#2ev%lb(&&jn3per+g5tf7w1%s64g!so^__600%m9'
+config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config')
+fp = os.path.join(config_dir, 'secret_key')
+with open(fp, 'r') as f:
+    SECRET_KEY = json.load(f)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+fp = os.path.join(config_dir, 'DEBUG')
+try:
+    with open(fp, 'r') as f:
+        DEBUG = json.load(f)
+except FileNotFoundError:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+fp = os.path.join(config_dir, 'allowed_hosts')
+with open(fp, 'r') as f:
+    ALLOWED_HOSTS = json.load(f)
 
+
+fp = os.path.join(config_dir, 'use_server_database')
+try:
+    with open(fp, 'r') as f:
+        USE_SERVER_DATABASE = json.load(f)
+except FileNotFoundError:
+    print('fp does not exist')
+    USE_SERVER_DATABASE = False
+_database_config = get_database_info() if USE_SERVER_DATABASE else get_debug_database_info()
+DATABASES = _database_config
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Application definition
 
@@ -76,12 +106,7 @@ WSGI_APPLICATION = 'barley.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 
 # Password validation

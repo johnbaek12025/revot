@@ -13,8 +13,7 @@ class Purchase(models.Model):
     reservation_date = models.CharField(default=today_date, db_index=True, max_length=8)
     reservation_at = models.CharField(max_length=8, db_index=True, null=True)
     done = models.CharField(max_length=8, db_index=True, null=True)
-    state = models.ForeignKey('main.State', on_delete=models.CASCADE)
-    
+    state = models.ForeignKey('main.State', on_delete=models.CASCADE)    
           
 
 

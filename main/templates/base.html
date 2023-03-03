@@ -21,11 +21,15 @@
             </div>
             <ul class="sidebar_menu">
                 <li class="on">
-                    <a href="{%url 'main:main'%}"><img src="{%static 'img/i_main.svg'%}" alt="메인">메인</a>
+                    {%if display_type == 1%}                    
+                        <a href="{%url 'main:main'%}"><img src="{%static 'img/i_main.svg'%}" alt="메인">메인</a>
+                    {%elif display_type == 0%}
+                        <a href="{%url 'main:main-grid'%}"><img src="{%static 'img/i_main.svg'%}" alt="메인">메인</a>
+                    {%endif%}
                     <a href="{%url 'main:mypage'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="내정보">내정보</a>
                     <a href="{%url 'main:buy-page'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="구매">구매</a>
                     <a href="{%url 'main:buy-schedule'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="구매 스케줄">구매 스케줄</a>
-                    <a href="{%url 'main:review-page'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="리뷰">리뷰</a>                    
+                    <a href="{%url 'main:review-page'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="리뷰">리뷰</a>
                     <a href="{%url 'main:review-schedule'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="리뷰 스케줄">리뷰 스케줄</a>
                 </li>
             </ul>
@@ -38,7 +42,7 @@
                         <li><a class="dropdown-item" href="{%url 'main:folder-page' folder_id=f.id %} ">{{f.name}} 상품수: {{f.product_count}}</a></li>
                         {% comment %} <li><a class="dropdown-item" href="#">폴더2</a></li> {% endcomment %}
                         {% endfor %}
-                        <li><a class="dropdown-item new" href="#">새로운 폴더 생성</a></li>
+                        <li><a class="dropdown-item new" href="{%url 'main:new-folder'%}">새로운 폴더 생성</a></li>
                     </ul>
                 </div>
             </div>

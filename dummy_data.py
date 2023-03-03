@@ -1,9 +1,13 @@
 import django
 import os, sys
+from datetime import datetime
+from random import randrange
+from datetime import timedelta
+
 
 # django setting 파일 설정하기 및 장고 셋업
 cur_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-print(cur_dir)
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))  # 프로젝트 폴더
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "barley.settings")
@@ -57,8 +61,17 @@ def make_products(user: User):
     p5.save()
     
 
-def make_folder(user: User):
-    pass
+def purchase_registe():    
+    u1 = User.objects.get(id=5)
+    s = check_state_from(1)
+    p_list = Product.objects.filter(owner=u1, state=s)
+    d1 = datetime.strptime('2023/3/3 1:30 PM', '%Y/%m/%d %I:%M %p')
+    d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
+    i = check_state_from(0)
+    for p in p_list:        
+        rd, rt = random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' ')
+        pp = Purchase(product=p, count=20, reservation_date=rd, reservation_at=rt, state=i)
+        pp.save()
 
 
 def request_tickets():
@@ -69,14 +82,33 @@ def request_tickets():
     u1 = User.objects.get(id=5)
     u2 = User.objects.get(id=6)
     s = check_state_from()
-    users = [d, s1, s2, u2, o, u1]
-    for u in users:
-        rt = RequestTicket(user=u, bank='nh', depositor_name=u.name, count=20, ticket_type='리뷰권', state=s)
+    
+    for i in range(1, 200):
+        rt = RequestTicket(user=u1, bank='nh', depositor_name=u1.name, count=i, ticket_type='리뷰권', state=s)
         rt.save()
+    for i in range(1, 200):
+        rt = RequestTicket(user=u1, bank='nh', depositor_name=u1.name, count=i, ticket_type='구매권', state=s)
+        rt.save()
+    
+    # users = [d, s1, s2, u2, o, u1]
+    # for u in users:
+    #     rt = RequestTicket(user=u, bank='nh', depositor_name=u.name, count=20, ticket_type='리뷰권', state=s)
+    #     rt.save()
 
-    for u in users:
-        rt = RequestTicket(user=u, bank='nh', depositor_name=u.name, count=20, ticket_type='구매권', state=s)
-        rt.save()
+    # for u in users:
+    #     rt = RequestTicket(user=u, bank='nh', depositor_name=u.name, count=20, ticket_type='구매권', state=s)
+    #     rt.save()
+    
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime 
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
+
     
    
 if __name__ =='__main__':
@@ -88,8 +120,13 @@ if __name__ =='__main__':
         u2_log = ses.post('http://localhost:5005/login/', json={"user": "jllab002@gmail.com", "pwd": "jllab1122", "rememeber_account": True})
         o_log = ses.post('http://localhost:5005/login/', json={"user": "jllab@gmail.com", "pwd": "jllab1122", "rememeber_account": True})
     """
-    users = make_account()
+    # d1 = datetime.strptime('2023/3/3 1:30 PM', '%Y/%m/%d %I:%M %p')
+    # d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
+    # for _ in range(10):
+    #     print(random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' '))
+    # users = make_account()
     # user = User.objects.get(id=3)
     # for u in users:
     #     make_products(u)
-    request_tickets()
+    # request_tickets()
+    purchase_registe()

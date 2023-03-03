@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class RequestTicket(models.Model):
     class Meta:    
-        ordering = ['-birth']
+        ordering = ['-id']
     user = models.ForeignKey('main.User', on_delete=models.CASCADE)
     bank = models.CharField(max_length=10)
     ticket_type = models.CharField(max_length=100)
@@ -24,5 +24,6 @@ class RequestTicket(models.Model):
                     "state": self.state.state,
                     "higherarchy": self.user.higherarchy.state,
                     "account": self.user.email_account,
+                    "birth": self.birth.strftime('%y-%m-%d')
                 }
                 

@@ -9,6 +9,9 @@ from main.views.security import ParsedClientView
 from datetime import datetime
 from django.db.models import Count
 from django.db.models import F
+from django.core.paginator import Paginator
+from django.db.models import Q
+
 
 
 class AboutPurchase(View):    
@@ -16,7 +19,7 @@ class AboutPurchase(View):
     @ParsedClientView.init_parse
     def get(self, req, p_date=None, id=None):        
         if req.resolver_match.url_name == 'date-purchase':
-            purchase_list = list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date).select_related('product'))            
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=p_date)).select_related('product'))
             data = [{
                         "reservation_date": p.reservation_date, 
                         "reservation_at": p.reservation_at, 
@@ -28,7 +31,12 @@ class AboutPurchase(View):
                         "count": p.count,
                         "price": int(p.product.price) * p.count,
                         "options": p.product.options,                        
-                        } for p in purchase_list]                    
+                        } for p in purchase_list]
+            pg_num = req.GET.get('page', 1)        
+            sc = req.GET.get('sc', 10)
+            paginator = Paginator(data, per_page=sc)
+            page_obj = paginator.get_page(pg_num)
+            data = list(page_obj.object_list)          
         elif req.resolver_match.url_name == 'detail':            
             purchase_list = list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date, id=id).select_related('product'))
             data = [{
@@ -43,9 +51,21 @@ class AboutPurchase(View):
                             "price": int(p.product.price) * p.count,
                             "options": p.product.options
                             } for p in purchase_list]
-        elif req.resolver_match.url_name == 'count':
-            data = list(Purchase.objects.values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
-            print(Purchase.objects.values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')).query)
+            pg_num = req.GET.get('page', 1)        
+            sc = req.GET.get('sc', 10)
+            paginator = Paginator(data, per_page=sc)
+            page_obj = paginator.get_page(pg_num)
+            data = list(page_obj.object_list)      
+        elif req.resolver_match.url_name == 'date-count':
+            data = list(Purchase.objects.filter(Q(product__owner=self._client)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
+        elif req.resolver_match.url_name == 'state-count':
+            i = check_state_from(0)
+            s = check_state_from(1)
+            f = check_state_from(2)
+            i_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=i)).count()
+            s_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)).count()
+            f_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=f)).count()            
+            data = {"total": i_cnt+s_cnt+f_cnt,"idle": i_cnt, "success": s_cnt, "fail": f_cnt}
         res = BaseJsonFormat(is_success=True, data=data)
         return HttpResponse(res, content_type="application/json", status=200)
     

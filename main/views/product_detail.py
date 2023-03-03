@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup as bs
 import re
 
+from main.views.exceptions import DataValueEmpty
+
 class FetchData:
     def __init__(self, pid, mall_name) -> None:
         self.url = f"https://smartstore.naver.com/{mall_name}/products/{pid}"
@@ -15,8 +17,11 @@ class FetchData:
     def main(self):
         self.session = requests.session()
         res = self.status_validation(self.url)
+        if not res:
+            raise DataValueEmpty
         options = self.extract_options_data_from(res)
-        product_dict = self.extract_product_data_from(res)
+        print(options)
+        product_dict = self.extract_product_data_from(res)        
         product_dict['options'] = options
         return product_dict
         
@@ -32,6 +37,7 @@ class FetchData:
     
     def extract_options_data_from(self, info):
         info = bs(info, 'html.parser')
+        print(f'-----------------------------{info}')
         options_info = info.find_all('script')[1]
         options_info = re.sub(r'window.__PRELOADED_STATE__=', '', options_info.text)
         data_dict = json.loads(options_info)['selectedOptions']['A']

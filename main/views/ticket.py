@@ -7,27 +7,35 @@ from main.models.client import User
 from main.models.clientdata import RequestTicket
 from main.views.security import ParsedClientView
 from django.db import transaction
+from django.core.paginator import Paginator
+from django.db.models import Q
+
 
 
 class AboutTicket(View):    
-    def request_data_about(self, ticket_type, count_bool=False):
-        requests = list(RequestTicket.objects.filter(ticket_typ=ticket_type, user=self._client).all())        
+    def request_data_about(self, ticket_type, req=None, count_bool=False):
+        requests = list(RequestTicket.objects.filter(Q(ticket_type=ticket_type)&Q(user=self._client)).all())
         if not count_bool:            
             data = [r._request_state for r in requests]
+            pg_num = req.GET.get('page', 1)        
+            sc = req.GET.get('sc', 10)
+            paginator = Paginator(data, per_page=sc)
+            page_obj = paginator.get_page(pg_num)
+            data = list(page_obj.object_list)
         else:            
-            data = [{"count": len(requests)}]
+            data = {"count": len(requests)}
         return BaseJsonFormat(is_success=True, data=data)
     
     @ParsedClientView.init_parse
     def get(self, req):
         if req.resolver_match.url_name == 'review-ticket':
-            res = self.request_data_about('리뷰권')
+            res = self.request_data_about('리뷰권', req)
         elif req.resolver_match.url_name == 'purchase-ticket':
-            res = self.request_data_about('구매권')
+            res = self.request_data_about('구매권', req)
         elif req.resolver_match.url_name == 'review-ticket-count':
             res = self.request_data_about('리뷰권', count_bool=True)
         elif req.resolver_match.url_name == 'purchase-ticket-count':
-            res = self.request_data_about('구매권', count_bool=True)                
+            res = self.request_data_about('구매권', count_bool=True)            
         return HttpResponse(res, content_type="application/json", status=200)
     
     @transaction.atomic

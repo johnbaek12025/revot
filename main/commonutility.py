@@ -1,5 +1,6 @@
 import json
 from main.models.client import State
+import os
 
 
 class BaseJsonFormat:
@@ -11,8 +12,7 @@ class BaseJsonFormat:
         self.data = data        
 
     def __str__(self):
-
-        return json.dumps(self.__dict__)
+        return json.dumps(self.__dict__, default=str)
 
 
 def get_client_ip(request):
@@ -31,3 +31,4 @@ def check_state_from(state_n=0):
         s = State(state=state_n)
         s.save()
     return s
+

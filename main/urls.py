@@ -1,7 +1,7 @@
 from django.urls import path
 from main.models.client import User
-from main.views.clientdata import AboutProduct, ProductData, RequestUserInfo, AboutFolder
-from main.views.pageviews import MainPage, MainPageGrid, MyPage, PurchaseMainPage, PurchaseSchedulePage, ReviewPage, ReviewSchedulePage
+from main.views.clientdata import AboutProduct, RequestUserInfo, AboutFolder
+from main.views.pageviews import FolderPage, MainPage, MainPageGrid, MyPage, PurchaseMainPage, PurchaseSchedulePage, ReviewPage, ReviewSchedulePage
 from main.views.registe import AboutPurchase, AboutReview
 from main.views.ticket import AboutTicket
 from main.views.join import JoinPage
@@ -22,38 +22,50 @@ urlpatterns = [
     path('buypage/schecule/', LoggedIn()(PurchaseSchedulePage.as_view(http_method_names=['get'])), name='buy-schedule'),
     path('reviewpage/', LoggedIn()(ReviewPage.as_view(http_method_names=['get'])), name='review-page'),
     path('reviewpage/schedule/', LoggedIn()(ReviewSchedulePage.as_view(http_method_names=['get'])), name='review-schedule'),
-    path('mainpage/<int:folder_id>/', LoggedIn()(MainPage.as_view(http_method_names=['get'])), name='folder-page'),
+    path('folderpage/<int:folder_id>/', LoggedIn()(FolderPage.as_view(http_method_names=['get'])), name='folder-page'),
+        
+    path('user/product/count/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-count'),
+    path('user/product/total/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='total-product'),
+    path('user/product/success/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='success-product'),
+    path('user/product/fail/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='fail-product'),
+    path('user/product/delete/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-delete'),
+    path('user/product/', LoggedIn()(AboutProduct.as_view(http_method_names=['put', 'post'])), name='product'),
+    path('user/product/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-detail'),
+    path('user/product/search/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='search-product'),
+    path('user/product/delete/', AboutProduct.as_view(http_method_names=['delete']), name='products-delete'),
     
-    
-    path('user/info/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get', 'put'])), name='my-data'),
-    path('user/info/<int:display>/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='display-type'),        
     path('user/newfolder/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='new-folder'),
-    path('user/product/', LoggedIn()(ProductData.as_view(http_method_names=['get'])), name='product-all'),
-    path('user/product/', LoggedIn()(ProductData.as_view(http_method_names=['get','put','post'])), name='product-all'),
-    path('user/product/delete/', AboutProduct.as_view(http_method_names=['delete']), name='product-delete'),
-    path('user/product/count/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product'),
-    # path('user/product/excel/', LoggedIn()(AboutProduct.as_view(http_method_names=['post'])), name='product-excel'),
-    path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['get', 'put'])), name='folder'),
+    path('user/folder/<int:folder_id>/count/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-detail-count'),
+    path('user/folder/<int:folder_id>/product/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-product'),    
+    path('user/folder/<int:folder_id>/product/delete/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='folder-product-delete'),    
+    path('user/folder/<int:folder_id>/product/<int:p_id>/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-product-detail'),
+    path('user/folder/<int:folder_id>/product/search/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-search-product'),
+    path('user/folder/<int:folder_id>/product/delete/', AboutFolder.as_view(http_method_names=['delete']), name='folder-products-delete'),
+    path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['put'])), name='folder'),        
+    # path('user/product/excel/', LoggedIn()(AboutProduct.as_view(http_method_names=['post'])), name='product-excel'),    
     
-    path('user/folder/detail/<int:folder_id>/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-detail'),
-    path('user/folder/delete/', LoggedIn()(AboutFolder.as_view(http_method_names=['delete'])), name='folder-delete'),
-    path('history/review/request/', LoggedIn()(AboutTicket.as_view(http_method_names=['get', 'put'])), name='review-ticket'),
-    path('history/purchase/request/', LoggedIn()(AboutTicket.as_view(http_method_names=['get', 'put'])), name='purchase-ticket'),
-    path('history/review/request/count/', LoggedIn()(AboutTicket.as_view(http_method_names=['get'])), name='review-ticket-count'),
-    path('history/purchase/request/count/', LoggedIn()(AboutTicket.as_view(http_method_names=['get'])), name='purchase-ticket-count'),
+    path('user/data/detail/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='my-data-detail'),
+    path('user/ticket/count/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='my-ticket'),
+    
+    
+    path('history/reviewticket/request/', LoggedIn()(AboutTicket.as_view(http_method_names=['get', 'put'])), name='review-ticket'),
+    path('history/purchaseticket/request/', LoggedIn()(AboutTicket.as_view(http_method_names=['get', 'put'])), name='purchase-ticket'),
+    path('history/reviewticket/request/count/', LoggedIn()(AboutTicket.as_view(http_method_names=['get'])), name='review-ticket-count'),
+    path('history/purchaseticket/request/count/', LoggedIn()(AboutTicket.as_view(http_method_names=['get'])), name='purchase-ticket-count'),
     path('request/review/ticket/', LoggedIn()(AboutTicket.as_view(http_method_names=['post'])), name='review-ticket'),
     path('request/purchase/ticket/', LoggedIn()(AboutTicket.as_view(http_method_names=['post'])), name='purchase-ticket'),    
     path('request/review/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='review-ticket'),
     path('request/purchase/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='purchase-ticket'),
     
-    path('purchase/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='count'),
+    path('purchase/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-count'),
+    path('purchase/state/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='state-count'),
     path('history/purchase/<str:p_date>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-purchase'),
     path('detail/purchase/<str:p_date>/info/<str:id>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='detail'),
     path('purchase/update/', LoggedIn()(AboutPurchase.as_view(http_method_names=['put'])), name='purchase-update'),
     path('registe/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['post'])), name='purchase'),
     path('delete/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
     
-    path('review/count/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='count'),
+    path('review/count/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
     path('history/review//<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='total-purchase'),
     path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),    
     path('review/update/', LoggedIn()(AboutReview.as_view(http_method_names=['put'])), name='review-update'),

@@ -37,11 +37,13 @@ class User(models.Model):
         return {"id": self.id ,"auth": self.authorization, "name": self.name, "phone":self.phone, "product_ticket": self.purchase_ticket, "review_ticket": self.purchase_ticket, "agency_code": self.agency_code, "recommendation_code": self.recommendation_code, "display_type": self.display_type, "self_code": self.self_code}
         
     @property
-    def _user_join_data(self):
+    def _user_data_detail(self):
         return {"name": self.name, "phone": self.phone, "account": self.email_account, "agency_code": self.agency_code, "recommendation_code": self.recommendation_code, "self_code": self.self_code}
         
-        
-        
+    
+    @property
+    def _user_tickets(self):
+        return {"review_ticket": self.review_ticket, "purchase_ticket": self.purchase_ticket}
 
 class Product(models.Model):    
     class Meta:    
