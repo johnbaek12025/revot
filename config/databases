@@ -3,7 +3,7 @@
         "ENGINE": "django.db.backends.mysql",
         "NAME": "revot",
         "USER": "django-developer",
-        "PASSWORD": "jllab1122",
+        "PASSWORD": "JLlab1122!",
         "HOST": "localhost",
         "PORT": "13307",
         "OPTIONS": {

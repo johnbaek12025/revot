@@ -17,6 +17,7 @@ migrations/
 urls_*.py
 test*.py
 checking_data/
+config/
 
 # Distribution / packaging
 .Python
