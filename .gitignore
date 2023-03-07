@@ -18,6 +18,7 @@ urls_*.py
 test*.py
 checking_data/
 config/
+databases
 
 # Distribution / packaging
 .Python
