@@ -43,7 +43,7 @@ def make_account():
     s2.save()    
     u = User(email_account='jllab001@gmail.com', password=make_password('jllab1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='010111122222', name='user', authorized_by=s1 ,review_ticket=100, purchase_ticket=100, self_code='SOLOMO', higherarchy=u_s)
     u.save()
-    u2 = User(email_account='jllab002@gmail.com', password=make_password('jllab2233'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=100, purchase_ticket=100, self_code='SLOWER', higherarchy=u_s)
+    u2 = User(email_account='jllab002@gmail.com', password=make_password('jllab1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=100, purchase_ticket=100, self_code='SLOWER', higherarchy=u_s)
     u2.save()
     return [u, u2]
     
@@ -124,9 +124,9 @@ if __name__ =='__main__':
     # d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
     # for _ in range(10):
     #     print(random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' '))
-    # users = make_account()
+    users = make_account()
     # user = User.objects.get(id=3)
-    # for u in users:
-    #     make_products(u)
-    # request_tickets()
+    for u in users:
+        make_products(u)
+    request_tickets()
     purchase_registe()

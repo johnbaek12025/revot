@@ -1,10 +1,10 @@
 import json
-from tkinter import Image
+
 from django.http import HttpResponse
 from django.views import View
 from main.commonutility import BaseJsonFormat, check_state_from
 from main.models.client import Product
-from main.models.pseudo import Purchase, Review
+from main.models.pseudo import Image, Purchase, Review
 from main.views.security import ParsedClientView
 from datetime import datetime
 from django.db.models import Count
