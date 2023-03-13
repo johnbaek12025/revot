@@ -22,6 +22,7 @@ class LogIn(View):
     
     
     def post(self, req):
+        # data = json.loads(req.body.decode())
         data = req.POST
         res = HttpResponseRedirect(reverse('main:login'))
         print(data)

@@ -2,7 +2,7 @@ import json
 
 from django.http import HttpResponse
 from django.views import View
-from main.commonutility import BaseJsonFormat, check_state_from
+from main.commonutility import BaseJsonFormat, check_state_from, random_date
 from main.models.client import Product
 from main.models.pseudo import Image, Purchase, Review
 from main.views.security import ParsedClientView
@@ -15,47 +15,36 @@ from django.db.models import Q
 
 
 class AboutPurchase(View):    
+    def make_pagination(self, req, data:list):
+        data = [{
+                    "id": p.id,
+                    "reservation_date": p.reservation_date, 
+                    "reservation_at": p.reservation_at, 
+                    "done_time": p.done,
+                    "pid": p.product.pid,
+                    "mid1": p.product.mid1,
+                    "mid2": p.product.mid2, 
+                    "state":p.state.state, 
+                    "count": p.count,
+                    "price": int(p.product.price) * p.count,
+                    "options": json.loads(p.product.options)['options'],
+                    "option_count": json.loads(p.product.options)['option_count'],
+                    } for p in data]
+        pg_num = req.GET.get('page', 1)        
+        sc = req.GET.get('sc', 10)
+        paginator = Paginator(data, per_page=sc)
+        page_obj = paginator.get_page(pg_num)
+        data = list(page_obj.object_list)          
+        return data
     
     @ParsedClientView.init_parse
     def get(self, req, p_date=None, id=None):        
         if req.resolver_match.url_name == 'date-purchase':
             purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=p_date)).select_related('product'))
-            data = [{
-                        "reservation_date": p.reservation_date, 
-                        "reservation_at": p.reservation_at, 
-                        "done_time": p.done,
-                        "pid": p.product.pid,
-                        "mid1": p.product.mid1,
-                        "mid2": p.product.mid2, 
-                        "state":p.state.state, 
-                        "count": p.count,
-                        "price": int(p.product.price) * p.count,
-                        "options": p.product.options,                        
-                        } for p in purchase_list]
-            pg_num = req.GET.get('page', 1)        
-            sc = req.GET.get('sc', 10)
-            paginator = Paginator(data, per_page=sc)
-            page_obj = paginator.get_page(pg_num)
-            data = list(page_obj.object_list)          
+            data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'detail':            
             purchase_list = list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date, id=id).select_related('product'))
-            data = [{
-                            "reservation_date": p.reservation_date, 
-                            "reservation_at": p.reservation_at, 
-                            "done_time": p.done,
-                            "pid": p.product.pid, 
-                            "mid1": p.product.mid1, 
-                            "mid2": p.product.mid2, 
-                            "state":p.state.state, 
-                            "count": p.count,
-                            "price": int(p.product.price) * p.count,
-                            "options": p.product.options
-                            } for p in purchase_list]
-            pg_num = req.GET.get('page', 1)        
-            sc = req.GET.get('sc', 10)
-            paginator = Paginator(data, per_page=sc)
-            page_obj = paginator.get_page(pg_num)
-            data = list(page_obj.object_list)      
+            data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'date-count':
             data = list(Purchase.objects.filter(Q(product__owner=self._client)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
         elif req.resolver_match.url_name == 'state-count':
@@ -65,7 +54,23 @@ class AboutPurchase(View):
             i_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=i)).count()
             s_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)).count()
             f_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=f)).count()            
-            data = {"total": i_cnt+s_cnt+f_cnt,"idle": i_cnt, "success": s_cnt, "fail": f_cnt}
+            data = {"total": i_cnt+s_cnt+f_cnt,"idle": i_cnt, "success": s_cnt, "fail": f_cnt}        
+        elif req.resolver_match.url_name == 'total':
+            data = []
+            purchase_list = list(Purchase.objects.filter(product__owner=self._client))
+            data = self.make_pagination(req, purchase_list)
+        elif req.resolver_match.url_name == 'success':            
+            s = check_state_from(1)
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))
+            data = self.make_pagination(req, purchase_list)
+        elif req.resolver_match.url_name == 'progress':
+            p = check_state_from(0)
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))
+            data = self.make_pagination(req, purchase_list)
+        elif req.resolver_match.url_name == 'fail':
+            f = check_state_from(2)
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))
+            data = self.make_pagination(req, purchase_list)
         res = BaseJsonFormat(is_success=True, data=data)
         return HttpResponse(res, content_type="application/json", status=200)
     
@@ -93,38 +98,34 @@ class AboutPurchase(View):
     def post(self, req):
         today = datetime.now().date()        
         data = json.loads(req.body.decode('utf-8'))        
-        product_id_list = data['product']
+        p_id = data['product']
         reservation_date = data['reservation_date']
-        #TODO: reservation_at randome으로 설정 기능
-        reservation_at = data.get('reservation_at', None)        
-        count = int(data['count'])        
-        s = check_state_from(0)
-        rd = datetime.strptime(reservation_date, '%Y-%m-%d').date()        
-        if rd < today:
+        # reservation_at = data.get('reservation_at', None)        
+        cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')
+        if reservation_date == cd:
+            d1 = datetime.strptime(f"{cd} {ct}", '%Y-%m-%d %H:%M')
+            d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+        elif reservation_date < cd:
             res = BaseJsonFormat(is_success=False, error_msg=f"선택된 날짜가 과거 입니다.")                
             return HttpResponse(res, content_type="application/json", status=401)
-        elif rd == today:
-            rt = datetime.strptime(reservation_at, '%H:%M').time()            
-            combined_time = datetime.combine(rd, rt)
-            if combined_time < datetime.now():
-                res = BaseJsonFormat(is_success=False, error_msg=f"선택된 시간이 과거 입니다.")                
-                return HttpResponse(res, content_type="application/json", status=401)
-        
-        for p_id in product_id_list:
-            self._client.purchase_ticket -= 1
-            if self._client.purchase_ticket < 0:
-                self._client.purchase_ticket = 0
-                self._client.save()
-                res = BaseJsonFormat(is_success=False, error_msg=f"추가 구매권을 구매하시기 바랍니다.")
-                return HttpResponse(res, content_type="application/json", status=401)            
-            try:
-                p_ob = Product.objects.get(id=p_id, owner=self._client)
-            except Product.DoesNotExist:
-                res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
-                return HttpResponse(res, content_type="application/json", status=401)
-            pp = Purchase(product=p_ob, reservation_date=reservation_date, reservation_at=reservation_at, state=s, count=count)
-            pp.save()
-            self._client.save()
+        else:
+            d1 = datetime.strptime(f"{cd} 00:00", '%Y-%m-%d %H:%M')
+            d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
+        count = int(data['count'])
+        s = check_state_from(0)
+        self._client.purchase_ticket -= 1
+        if self._client.purchase_ticket < 0:            
+            res = BaseJsonFormat(is_success=False, error_msg=f"추가 구매권을 구매하시기 바랍니다.")
+            return HttpResponse(res, content_type="application/json", status=401)            
+        try:
+            p_ob = Product.objects.get(id=p_id, owner=self._client)
+        except Product.DoesNotExist:
+            res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
+            return HttpResponse(res, content_type="application/json", status=401)
+        pp = Purchase(product=p_ob, reservation_date=rd, reservation_at=rt, state=s, count=count)
+        pp.save()
+        self._client.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     
@@ -148,6 +149,18 @@ class AboutPurchase(View):
 class AboutReview(View):
     @ParsedClientView.init_parse
     def get(self, req):
+        if req.resolver_match.url_name == 'date-count':
+            pass
+        elif req.resolver_match.url_name == 'date-review':
+            pass
+        elif req.resolver_match.url_name == 'detail':
+            pass
+        elif req.resolver_match.url_name == 'total':
+            pass
+        elif req.resolver_match.url_name == 'progress':
+            pass
+        elif req.resolver_match.url_name == 'fail':
+            pass
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     
@@ -160,13 +173,12 @@ class AboutReview(View):
     def post(self, req):
         print(self._client)
         file = req.FILES['file']
-        data = req.POST
-        auto_fill = data['auto_fill']        
+        data = json.loads(req.body.decode('utf-8'))
+        auto_fill = data['auto_fill']
         purchase_id = int(data['purchase'])
         reservation_date = data['reservation_date']
         reservation_at = data['reservation_at']
-        s = check_state_from(0)
-        
+        s = check_state_from(0)        
         try:
             po = Purchase.objects.get(id=purchase_id)
         except Purchase.DoesNotExist:
@@ -177,16 +189,23 @@ class AboutReview(View):
             contents = data['contents']
         else:
             contents = None
+            #TODO: implement api for getting review content from outer service
         img = Image(img=file)
-        r = Review(purchase=po, reservation_at=reservation_at, reservation_date=reservation_date, state=s, img=img, contents=contents)
-        
+        r = Review(purchase=po, reservation_at=reservation_at, reservation_date=reservation_date, state=s, img=img, contents=contents)        
         r.save()
-        
-        
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     
     @ParsedClientView.init_parse
     def delete(self, req):
+        ids = json.loads(req.body.decode('utf-8'))['data']
+        if not ids:
+            err_msg = '비정상 접근입니다.'
+            res = BaseJsonFormat(is_success=False, error_msg=err_msg)
+            return HttpResponse(res, content_type="application/json", status=401)        
+        ids = [int(x) for x in ids]
+        s = check_state_from(0)
+        ph = Review.objects.filter(id__in=ids, purchase__product__owner=self._client, state=s)
+        ph.delete()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)

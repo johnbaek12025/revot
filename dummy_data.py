@@ -65,13 +65,14 @@ def purchase_registe():
     u1 = User.objects.get(id=5)
     s = check_state_from(1)
     p_list = Product.objects.filter(owner=u1, state=s)
-    d1 = datetime.strptime('2023/3/3 1:30 PM', '%Y/%m/%d %I:%M %p')
+    d1 = datetime.strptime('2023/3/20 1:30 PM', '%Y/%m/%d %I:%M %p')
     d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
     i = check_state_from(0)
     for p in p_list:        
-        rd, rt = random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' ')
-        pp = Purchase(product=p, count=20, reservation_date=rd, reservation_at=rt, state=i)
-        pp.save()
+        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')
+        print(rd)
+        # pp = Purchase(product=p, count=20, reservation_date=rd, reservation_at=rt, state=i)
+        # pp.save()
 
 
 def request_tickets():
@@ -124,9 +125,23 @@ if __name__ =='__main__':
     # d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
     # for _ in range(10):
     #     print(random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' '))
-    users = make_account()
+    # users = make_account()
     # user = User.objects.get(id=3)
-    for u in users:
-        make_products(u)
-    request_tickets()
-    purchase_registe()
+    # for u in users:
+    #     make_products(u)
+    # request_tickets()
+    # purchase_registe()
+    date1 = input('날짜를 %Y-%m-%d 순으로 입력: ')
+    cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')
+    # print(cd, ct)
+    if date1 == cd:
+        d1 = datetime.strptime(f"{cd} {ct}", '%Y-%m-%d %H:%M')
+        d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
+    else:
+        d1 = datetime.strptime(f"{cd} 00:00", '%Y-%m-%d %H:%M')
+        d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
+    print(rd, rt)
+    # datetime.strptime(f"{d1} ", )
+    

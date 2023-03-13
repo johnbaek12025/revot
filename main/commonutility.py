@@ -1,6 +1,8 @@
 import json
 from main.models.client import State
 import os
+from datetime import datetime, timedelta
+from random import randrange
 
 
 class BaseJsonFormat:
@@ -32,3 +34,17 @@ def check_state_from(state_n=0):
         s.save()
     return s
 
+def save_file(file_name, data):
+    with open(file_name, 'w', encoding='utf-8') as f:
+        f.write(str(data))
+        
+        
+def random_date(start, end):
+    """
+    This function will return a random datetime between two datetime 
+    objects.
+    """
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)

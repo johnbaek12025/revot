@@ -1,6 +1,8 @@
+import datetime
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from main.commonutility import BaseJsonFormat, check_state_from
+from main.models.client import Product
 from main.models.pseudo import Purchase
 
 
@@ -8,6 +10,8 @@ from main.models.pseudo import Purchase
 def purchase_info_from(req):
     if req.method == 'GET':
         i = check_state_from(0)
+        
+        Product.objects.filter()
         res = BaseJsonFormat(is_success=True)
         res = HttpResponse(res, content_type="application/json")
 

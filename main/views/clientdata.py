@@ -193,7 +193,8 @@ class AboutProduct(View):
         if req.resolver_match.url_name == 'product':
             data = json.loads(req.body.decode('utf-8'))
             url = data['url']
-            mid1 = data['mid']
+            mid1 = data['mid1']
+            mid2 = data.get('mid2', None)
             keyword = data['keyword']            
             match = re.match(r"https:\/\/smartstore\.naver\.com\/(\w+)\/products\/(\d+)\?*.*", url)                     
             if match:
@@ -208,13 +209,13 @@ class AboutProduct(View):
                 rest_data = fd.main()
             except DataValueEmpty:
                 s = check_state_from(2)                
-                p = Product(pid=pid, mid1=mid1, keyword=keyword, state=s, owner=self._client, mall_name=mall_name)
+                p = Product(pid=pid, mid1=mid1, mid2=mid2, keyword=keyword, state=s, owner=self._client, mall_name=mall_name)
                 p.save()
                 res = BaseJsonFormat(is_success=False, error_msg='상품에 대한 정보를 찾을 수 없습니다.')
                 return HttpResponse(res, content_type="application/json", status=401)
             else:
                 s = check_state_from(1)
-                p = Product(pid=pid, mid1=mid1, keyword=keyword, state=s, owner=self._client, mall_name=mall_name, **rest_data)
+                p = Product(pid=pid, mid1=mid1, mid2=mid2, keyword=keyword, state=s, owner=self._client, mall_name=mall_name, **rest_data)
                 p.save()
                 res = BaseJsonFormat()
         elif req.resolver_match.url_name == 'product-excel':

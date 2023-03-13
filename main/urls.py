@@ -61,16 +61,25 @@ urlpatterns = [
     path('purchase/state/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='state-count'),
     path('history/purchase/<str:p_date>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-purchase'),
     path('detail/purchase/<str:p_date>/info/<str:id>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='detail'),
+    path('purchase/history/total/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
+    path('purchase/history/progress/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
+    path('purchase/history/success/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
+    path('purchase/history/fail/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
     path('purchase/update/', LoggedIn()(AboutPurchase.as_view(http_method_names=['put'])), name='purchase-update'),
     path('registe/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['post'])), name='purchase'),
     path('delete/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
     
+    
     path('review/count/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
-    path('history/review//<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='total-purchase'),
+    path('history/review//<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
     path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),    
+    path('review/history/total/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='total'),
+    path('review/history/progress/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='progress'),
+    path('review/history/success/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='success'),
+    path('review/history/fail/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='fail'),
     path('review/update/', LoggedIn()(AboutReview.as_view(http_method_names=['put'])), name='review-update'),
     path('registe/review/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review'),
     path('rgiste/img/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review-img'),
-    path('delete/review/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
+    path('delete/review/', LoggedIn()(AboutReview.as_view(http_method_names=['delete'])), name='delete-purchase'),    
 ]
 

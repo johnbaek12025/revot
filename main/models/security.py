@@ -43,4 +43,4 @@ class DangerousAction(ClientInfoBaseModel):
     message = models.TextField(null=True, default=None, blank=True)
 
     def __str__(self):
-        return str(self.owner) + ';' + self.message    
+        return str(self.owner) + ';' + self.message

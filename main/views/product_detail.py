@@ -37,20 +37,20 @@ class FetchData:
     
     def extract_options_data_from(self, info):
         info = bs(info, 'html.parser')
-        print(f'-----------------------------{info}')
         options_info = info.find_all('script')[1]
         options_info = re.sub(r'window.__PRELOADED_STATE__=', '', options_info.text)
         data_dict = json.loads(options_info)['selectedOptions']['A']
-        text_options = data_dict['textOptions']
-        simple_options = data_dict['simpleOptions']
-        comb_options = data_dict["combinationOptions"]
-        color_options = data_dict["colorOptions"]
-        size_options = data_dict["sizeOptions"]        
+        text_options = data_dict.get('textOptions')
+        simple_options = data_dict.get('simpleOptions')
+        comb_options = data_dict.get("combinationOptions")
+        color_options = data_dict.get("colorOptions")
+        size_options = data_dict.get("sizeOptions")
         supplements = data_dict.get('supplementProducts', None)
         option_dict = {}
         cnt = 0
-        if text_options:
-            cnt += len(text_options)
+        
+        if text_options:            
+            cnt += len(text_options)            
             option_dict.update(self.extract_text_options_from(text_options))
         if simple_options:
             cnt += len(simple_options)
@@ -67,23 +67,24 @@ class FetchData:
         if supplements:
             cnt += len(supplements)
             option_dict.update(self.extract_supplements_from(supplements))
-        return json.dumps({"option_count": cnt, "options": option_dict})
-        
         # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_options.json')
+        return json.dumps({"option_count": cnt, "options": option_dict}, ensure_ascii=False)
+        
+        
         # options_dict = data_dict['selectedOptions']
         
     def extract_text_options_from(self, text_options):
         option_dict = {}
         for option in text_options:
             option_dict[option['groupName']] = ""
-        self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_text_options.json')
+        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_text_options.json')
         return option_dict        
     
     def extract_simple_options_from(self, simple_options):
         option_dict = {}
         for option in simple_options:
             option_dict[option['groupName']] = [o['name'] for o in option['options']]
-        self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_simple_options.json')
+        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_simple_options.json')
         return option_dict
         
         
@@ -101,20 +102,20 @@ class FetchData:
         for option in option_list:
             for i, o in enumerate(option):
                 option_dict[list(option_dict.keys())[i]].append(o)
-        self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_comb_options.json')
+        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_comb_options.json')
         return option_dict
         
     def extract_size_options_from(self, size_options):
         option = size_options[self.pid]
         option_dict = {option['groupName']: [o['optionName'] for o in option['options']]}
-        self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_size_options.json')
+        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_size_options.json')
         return option_dict
         
 
     def extract_color_options_from(self, color_options):
         option = color_options[self.pid]
         option_dict = {option['groupName']: [o['optionName'] for o in option['options']]}
-        self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_color_options.json')
+        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_color_options.json')
         return option_dict
         
         
@@ -123,7 +124,7 @@ class FetchData:
         option_dict = {}
         for sup in supplements:
             option_dict[sup['groupName']] = [o['name'] for o in sup['options']]
-        self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_supplements.json')
+        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_supplements.json')
         return option_dict
         
     
