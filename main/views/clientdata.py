@@ -62,8 +62,12 @@ class AboutProduct(View):
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
             if p.options:                                
-                options = json.loads(p.options)                
-                option_count = options['option_count']
+                try:
+                    options = json.loads(p.options)
+                    option_count = options['option_count']
+                except TypeError:
+                    options = json.loads(json.loads(p.options))
+                    option_count = options['option_count']
                 option_kind = list(options['options'].keys())
             else:
                 option_kind = []
@@ -72,7 +76,7 @@ class AboutProduct(View):
                                     "id": p.id,
                                     "name": p.name, 
                                     "mall_name": p.mall_name, 
-                                    "birth": p.birth.strftime('%y-%m-%d'),
+                                    "birth": p.birth.strftime('%Y-%m-%d'),
                                     "keyword": keywords,
                                     "mid1": p.mid1,
                                     "mid2": p.mid2,
@@ -120,23 +124,25 @@ class AboutProduct(View):
                 res = BaseJsonFormat(is_success=False, error_msg=err_msg)
                 return HttpResponse(res, content_type="application/json", status=401)        
             else:
-                options = json.loads(p.options)
-                option_count = options['option_count']
-                options = options['options']
-                option_kind = [o for o in options]                
+                try:
+                    options = json.loads(p.options)
+                    option_count = options['option_count']
+                except TypeError:
+                    options = json.loads(json.loads(p.options))
+                    option_count = options['option_count']
+                options = options['options']                              
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
                     "name": p.name, 
                     "mall_name": p.mall_name, 
-                    "birth": p.birth.strftime('%y-%m-%d'),
+                    "birth": p.birth.strftime('%Y-%m-%d'),
                     "keyword": keywords,
                     "mid1": p.mid1,
                     "mid2": p.mid2,
                     "pid": p.pid,
                     "img": p.img_url,
-                    "option_count": option_count,
-                    "options": option_kind,
+                    "option_count": option_count,                    
                     "option_detail": options,
                     "searching_type": p.searching_type,
                 }
@@ -239,16 +245,18 @@ class AboutProduct(View):
 
 class AboutFolder(View):
     def jsonize_specific_data(self, req, q):
-        product_list = list(Product.objects.filter(q))
-        print(product_list)
+        product_list = list(Product.objects.filter(q))      
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
             if p.options:                
-                options = json.loads(p.options)                
-                option_count = options['option_count']
-                options = options['options']
-                option_kind = [o for o in options]
+                try:
+                    options = json.loads(p.options)
+                    option_count = options['option_count']
+                except TypeError:
+                    options = json.loads(json.loads(p.options))
+                    option_count = options['option_count']
+                option_kind = list(options['options'].keys())
             else:
                 option_kind = []
                 option_count = 0
@@ -256,7 +264,7 @@ class AboutFolder(View):
                                     "id": p.id,
                                     "name": p.name, 
                                     "mall_name": p.mall_name, 
-                                    "birth": p.birth.strftime('%y-%m-%d'),
+                                    "birth": p.birth.strftime('%Y-%m-%d'),
                                     "keyword": keywords,
                                     "mid1": p.mid1,
                                     "mid2": p.mid2,
@@ -276,7 +284,7 @@ class AboutFolder(View):
     def get(self, req, folder_id=None, p_id=None):        
         if req.resolver_match.url_name == 'folder-product':
             q = Q(owner=self._client) & Q(folder=folder_id)
-            res = self.jsonize_specific_data(req, q)                    
+            res = self.jsonize_specific_data(req, q)
         elif req.resolver_match.url_name == 'folder-product-detail':
             try:
                 p = Product.objects.get(Q(id=p_id)&Q(folder=folder_id))
@@ -285,41 +293,33 @@ class AboutFolder(View):
                 res = BaseJsonFormat(is_success=False, error_msg=err_msg)
                 return HttpResponse(res, content_type="application/json", status=401)        
             else:
-                options = json.loads(p.options)
-                option_count = options['option_count']
-                options = options['options']
-                option_kind = [o for o in options]                
+                try:
+                    options = json.loads(p.options)
+                    option_count = options['option_count']
+                except TypeError:
+                    options = json.loads(json.loads(p.options))
+                    option_count = options['option_count']                
+                options = options['options']                            
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
                     "name": p.name, 
                     "mall_name": p.mall_name, 
-                    "birth": p.birth.strftime('%y-%m-%d'),
+                    "birth": p.birth.strftime('%Y-%m-%d'),
                     "keyword": keywords,
                     "mid1": p.mid1,
                     "mid2": p.mid2,
                     "pid": p.pid,
                     "img": p.img_url,
-                    "option_count": option_count,
-                    "options": option_kind,
+                    "option_count": option_count,                    
+                    "option_detail": options,
                     "searching_type": p.searching_type,
                 }
                 res = BaseJsonFormat(is_success=True, data=data)
         elif req.resolver_match.url_name == 'folder-search-product':
             query = req.GET.get('q')
             q = Q(owner=self._client) & Q(name__icontains=query)&Q(folder=folder_id)
-            res = self.jsonize_specific_data(req, q)            
-        elif req.resolver_match.url_name == 'folder-product-delete':
-            try:
-                p = Product.objects.get(Q(id=p_id)&Q(folder=folder_id))
-            except Product.DoesNotExist:
-                err_msg = '비정상 접근입니다.'
-                res = BaseJsonFormat(is_success=False, error_msg=err_msg)
-                return HttpResponse(res, content_type="application/json", status=401)        
-            else:
-                p.delete()
-                p.save()
-            res = BaseJsonFormat(is_success=True, msg='정상으로 삭제 되었습니다.')
+            res = self.jsonize_specific_data(req, q)        
         elif req.resolver_match.url_name == 'folder-detail-count':
             p_cnt = Product.objects.filter(Q(owner=self._client)& Q(folder__id=folder_id)).count()
             res = BaseJsonFormat(is_success=True, data={"products_cnt": p_cnt})
@@ -335,12 +335,12 @@ class AboutFolder(View):
     def put(self, req):
         data = json.loads(req.body.decode('utf-8'))
         print(data)
-        f_id = data['id']
+        f_id = int(data['id'])
         name = data.get("name", None)
         product_id_list = data['product']
         folder = ProductFolder.objects.get(id=f_id, user=self._client)        
         if name:
-            folder.name = name        
+            folder.name = name 
         products = list(Product.objects.filter(id__in=product_id_list).all())
         pf = ProductFolder.objects.get(user=self._client, id=f_id)
         for p in products:

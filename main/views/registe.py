@@ -80,8 +80,7 @@ class AboutPurchase(View):
         data = json.loads(req.body.decode('utf-8'))
         id = data['id']
         count = data['count']
-        reservation_date = data['reservation_date']
-        #TODO: reservation_at -> rd1, rd2?
+        reservation_date = data['reservation_date']        
         reservation_at = data['reservation_at']
         try:
             rp = Purchase.objects.get(id=id)
@@ -100,18 +99,29 @@ class AboutPurchase(View):
         today = datetime.now().date()        
         data = json.loads(req.body.decode('utf-8'))        
         p_id = data['product']
-        reservation_date = data['reservation_date']
-        # reservation_at = data.get('reservation_at', None)        
-        cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')
-        if reservation_date == cd:
-            d1 = datetime.strptime(f"{cd} {ct}", '%Y-%m-%d %H:%M')
-            d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
-        elif reservation_date < cd:
+        rd = data['reservation_date']
+        rt1 = data.get('rt1', None)
+        rt2 = data.get('rt2', None)
+        selected_options = data['options']
+        count = data['count']
+        cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')        
+        if rd == cd:
+            if rt1 and rt2:
+                d1 = datetime.strptime(f"{cd} {rt1}", '%Y-%m-%d %H:%M')
+                d2 = datetime.strptime(f"{cd} {rt2}", '%Y-%m-%d %H:%M')
+            else:                
+                d1 = datetime.strptime(f"{cd} {ct}", '%Y-%m-%d %H:%M')
+                d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')                
+        elif rd < cd:
             res = BaseJsonFormat(is_success=False, error_msg=f"선택된 날짜가 과거 입니다.")                
             return HttpResponse(res, content_type="application/json", status=401)
         else:
-            d1 = datetime.strptime(f"{cd} 00:00", '%Y-%m-%d %H:%M')
-            d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+            if rt1 and rt2:
+                d1 = datetime.strptime(f"{rd} {rt1}", '%Y-%m-%d %H:%M')
+                d2 = datetime.strptime(f"{rd} {rt2}", '%Y-%m-%d %H:%M')
+            else:                
+                d1 = datetime.strptime(f"{rd} 00:00", '%Y-%m-%d %H:%M')
+                d2 = datetime.strptime(f"{rd} 23:59", '%Y-%m-%d %H:%M')
         rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
         count = int(data['count'])
         s = check_state_from(0)
@@ -124,7 +134,7 @@ class AboutPurchase(View):
         except Product.DoesNotExist:
             res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
             return HttpResponse(res, content_type="application/json", status=401)
-        pp = Purchase(product=p_ob, reservation_date=rd, reservation_at=rt, state=s, count=count)
+        pp = Purchase(product=p_ob, reservation_date=rd, reservation_at=rt, state=s, count=count, selected_options=[])
         pp.save()
         self._client.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")

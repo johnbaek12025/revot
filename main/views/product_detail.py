@@ -5,7 +5,10 @@ import requests
 from bs4 import BeautifulSoup as bs
 import re
 
-from main.views.exceptions import DataValueEmpty
+class ClientDataException(Exception):
+    pass
+class DataValueEmpty(ClientDataException):
+    pass
 
 class FetchData:
     def __init__(self, pid, mall_name) -> None:
@@ -46,29 +49,31 @@ class FetchData:
         color_options = data_dict.get("colorOptions")
         size_options = data_dict.get("sizeOptions")
         supplements = data_dict.get('supplementProducts', None)
+             
         option_dict = {}
         cnt = 0        
         if text_options:                      
             cnt += len(text_options)
             print(f"text_options {len(text_options)}")
             option_dict.update(self.extract_text_options_from(text_options))
-        elif simple_options:
+        if simple_options:
             cnt += len(simple_options)
             print(f"simple_options {len(simple_options)}")
             option_dict.update(self.extract_simple_options_from(simple_options))
-        elif comb_options:
+        if comb_options:
             opt_cnt, extracted_option = self.extract_comb_options_from(comb_options)
             cnt += opt_cnt
             option_dict.update(extracted_option)
-        elif color_options:
+        if color_options:
             print(f"color_options {len(color_options)}")
             cnt += len(color_options)
             option_dict.update(self.extract_color_options_from(color_options))
-        elif size_options:
+        if size_options:
             print(f"size_options {len(size_options)}")
             cnt += len(size_options)
             option_dict.update(self.extract_size_options_from(size_options))
-        elif supplements:
+        if supplements:
+            print(supplements, len(supplements))
             print(f"supplements {len(supplements)}")
             cnt += len(supplements)
             option_dict.update(self.extract_supplements_from(supplements))
@@ -167,4 +172,7 @@ class FetchData:
                 return res.text
         else:
             return None
-        
+
+if __name__ == '__main__':
+    fd = FetchData(mall_name='garakfruit', pid='123486199')
+    fd.main()
