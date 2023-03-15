@@ -123,9 +123,7 @@ class AboutProduct(View):
                 options = json.loads(p.options)
                 option_count = options['option_count']
                 options = options['options']
-                option_kind = [o for o in options]
-                print(option_count)
-                print(option_kind)
+                option_kind = [o for o in options]                
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
@@ -246,12 +244,8 @@ class AboutFolder(View):
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
-            if p.options:
-                #TODO: 나중에 Mysql에서 돌릴시 제거
-                try:
-                    options = json.loads(p.options)
-                except:
-                    options = eval(p.options)
+            if p.options:                
+                options = json.loads(p.options)                
                 option_count = options['option_count']
                 options = options['options']
                 option_kind = [o for o in options]

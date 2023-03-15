@@ -45,7 +45,9 @@ def make_account():
     u.save()
     u2 = User(email_account='jllab002@gmail.com', password=make_password('jllab1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=100, purchase_ticket=100, self_code='SLOWER', higherarchy=u_s)
     u2.save()
-    return [u, u2]
+    u3 = User(email_account='test@test.com', password=make_password('test1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=100, purchase_ticket=100, self_code='SLOWER', higherarchy=u_s)
+    u3.save()
+    
     
 def make_products(user: User):
     s = check_state_from()
@@ -125,23 +127,23 @@ if __name__ =='__main__':
     # d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
     # for _ in range(10):
     #     print(random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' '))
-    # users = make_account()
-    # user = User.objects.get(id=3)
-    # for u in users:
-    #     make_products(u)
+    users = make_account()
+    user = User.objects.get(email_account='test@test.com')
+    for u in users:
+        make_products(u)
     # request_tickets()
     # purchase_registe()
-    date1 = input('날짜를 %Y-%m-%d 순으로 입력: ')
-    cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')
-    # print(cd, ct)
-    if date1 == cd:
-        d1 = datetime.strptime(f"{cd} {ct}", '%Y-%m-%d %H:%M')
-        d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
-        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
-    else:
-        d1 = datetime.strptime(f"{cd} 00:00", '%Y-%m-%d %H:%M')
-        d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
-        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')
-    print(rd, rt)
+    # date1 = input('날짜를 %Y-%m-%d 순으로 입력: ')
+    # cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')
+    # # print(cd, ct)
+    # if date1 == cd:
+    #     d1 = datetime.strptime(f"{cd} {ct}", '%Y-%m-%d %H:%M')
+    #     d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+    #     rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
+    # else:
+    #     d1 = datetime.strptime(f"{cd} 00:00", '%Y-%m-%d %H:%M')
+    #     d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
+    #     rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')
+    # print(rd, rt)
     # datetime.strptime(f"{d1} ", )
     
