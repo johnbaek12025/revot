@@ -141,7 +141,7 @@ if __name__ =='__main__':
     else:
         d1 = datetime.strptime(f"{cd} 00:00", '%Y-%m-%d %H:%M')
         d2 = datetime.strptime(f"{cd} 23:59", '%Y-%m-%d %H:%M')
-        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')    
+        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')
     print(rd, rt)
     # datetime.strptime(f"{d1} ", )
     

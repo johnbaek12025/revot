@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.utils.timezone import now
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -62,6 +63,13 @@ class Product(models.Model):
     searching_type = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1)], default=0)
     options = models.TextField()
     price = models.CharField(max_length=100, null=True, blank=True, default=None)
+    
+    def save(self, *args, **kwargs):
+        # Convert the dictionary to a JSON string and store it in the field
+        self.options = json.dumps(self.options)
+        super().save(*args, **kwargs)    
+    
+    
     @property
     def _product_data(self):
         return {"id": self.id, "pid": self.pid, "mid1": self.mid1, "keyword": self.keyword}

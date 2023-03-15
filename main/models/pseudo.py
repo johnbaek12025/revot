@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.utils.timezone import now
 
@@ -14,8 +15,13 @@ class Purchase(models.Model):
     reservation_at = models.CharField(max_length=8, db_index=True, null=True)
     done = models.CharField(max_length=8, db_index=True, null=True)
     state = models.ForeignKey('main.State', on_delete=models.CASCADE)    
-          
+    selected_options = models.TextField()
 
+    def save(self, *args, **kwargs):
+        # Convert the dictionary to a JSON string and store it in the field
+        self.selected_options = json.dumps(self.selected_options)
+        super().save(*args, **kwargs)    
+    
 
 class Review(models.Model):
     class Meta:    

@@ -1,4 +1,5 @@
 import json
+from django.db import OperationalError
 
 from django.http import HttpResponse
 from django.views import View
@@ -51,25 +52,25 @@ class AboutPurchase(View):
             i = check_state_from(0)
             s = check_state_from(1)
             f = check_state_from(2)
-            i_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=i)).count()
+            p_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=i)).count()
             s_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)).count()
             f_cnt = Purchase.objects.filter(Q(product__owner=self._client)&Q(state=f)).count()            
-            data = {"total": i_cnt+s_cnt+f_cnt,"idle": i_cnt, "success": s_cnt, "fail": f_cnt}        
-        elif req.resolver_match.url_name == 'total':
-            data = []
-            purchase_list = list(Purchase.objects.filter(product__owner=self._client))
+            data = {"total": p_cnt+s_cnt+f_cnt,"progress": p_cnt, "success": s_cnt, "fail": f_cnt}
+        elif req.resolver_match.url_name == 'total':            
+            purchase_list = list(Purchase.objects.filter(product__owner=self._client))            
+            print(purchase_list)
             data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'success':            
-            s = check_state_from(1)
-            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))
+            s = check_state_from(1)            
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))            
             data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'progress':
             p = check_state_from(0)
-            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=p)))
             data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'fail':
             f = check_state_from(2)
-            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=f)))
             data = self.make_pagination(req, purchase_list)
         res = BaseJsonFormat(is_success=True, data=data)
         return HttpResponse(res, content_type="application/json", status=200)

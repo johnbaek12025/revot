@@ -61,15 +61,10 @@ class AboutProduct(View):
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
-            if p.options:
-                #TODO: 나중에 Mysql에서 돌릴시 제거
-                try:
-                    options = json.loads(p.options)
-                except:
-                    options = eval(p.options)
+            if p.options:                                
+                options = json.loads(p.options)                
                 option_count = options['option_count']
-                options = options['options']
-                option_kind = [o for o in options]
+                option_kind = list(options['options'].keys())
             else:
                 option_kind = []
                 option_count = 0
@@ -128,7 +123,9 @@ class AboutProduct(View):
                 options = json.loads(p.options)
                 option_count = options['option_count']
                 options = options['options']
-                option_kind = [o for o in options]                
+                option_kind = [o for o in options]
+                print(option_count)
+                print(option_kind)
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
@@ -142,6 +139,7 @@ class AboutProduct(View):
                     "img": p.img_url,
                     "option_count": option_count,
                     "options": option_kind,
+                    "option_detail": options,
                     "searching_type": p.searching_type,
                 }
                 res = BaseJsonFormat(is_success=True, data=data)
@@ -219,7 +217,7 @@ class AboutProduct(View):
                 p.save()
                 res = BaseJsonFormat()
         elif req.resolver_match.url_name == 'product-excel':
-            #TODO: excel-format -> List[Dict] and save to Product
+        #     #TODO: excel-format -> List[Dict] and save to Product
             res = BaseJsonFormat(is_success=True, msg='등록이 완료 되었습니다.')
         return HttpResponse(res, content_type="application/json", status=200)
     
@@ -229,16 +227,16 @@ class AboutProduct(View):
     def delete(self, req):
         if req.resolver_match.url_name == 'products-delete':
             ids = json.loads(req.body.decode('utf-8'))['data']
+            print(ids)
             if not ids:
                 err_msg = '비정상 접근입니다.'
                 res = BaseJsonFormat(is_success=False, error_msg=err_msg)
-                return HttpResponse(res, content_type="application/json", status=401)
-            if req.resolver_match.url_name == 'product-delete':
-                ids = [int(x) for x in ids]
-                p = Product.objects.filter(id__in=ids, owner=self._client, state__state=0)            
-                p.delete()            
-                res = BaseJsonFormat(is_success=True, msg='정상으로 삭제 되었습니다.')
-                return HttpResponse(res, content_type="application/json", status=200)
+                return HttpResponse(res, content_type="application/json", status=401)            
+            ids = [int(x) for x in ids]
+            p = Product.objects.filter(id__in=ids, owner=self._client, state__state=0)            
+            p.delete()            
+            res = BaseJsonFormat(is_success=True, msg='정상으로 삭제 되었습니다.')
+            return HttpResponse(res, content_type="application/json", status=200)
 
 
 class AboutFolder(View):

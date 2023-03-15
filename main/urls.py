@@ -68,8 +68,7 @@ urlpatterns = [
     path('purchase/update/', LoggedIn()(AboutPurchase.as_view(http_method_names=['put'])), name='purchase-update'),
     path('registe/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['post'])), name='purchase'),
     path('delete/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
-    
-    
+        
     path('review/count/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
     path('history/review//<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
     path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),    
@@ -80,6 +79,6 @@ urlpatterns = [
     path('review/update/', LoggedIn()(AboutReview.as_view(http_method_names=['put'])), name='review-update'),
     path('registe/review/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review'),
     path('rgiste/img/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review-img'),
-    path('delete/review/', LoggedIn()(AboutReview.as_view(http_method_names=['delete'])), name='delete-purchase'),    
+    path('delete/review/', LoggedIn()(AboutReview.as_view(http_method_names=['delete'])), name='delete-purchase'),        
 ]
 

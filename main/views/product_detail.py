@@ -47,28 +47,34 @@ class FetchData:
         size_options = data_dict.get("sizeOptions")
         supplements = data_dict.get('supplementProducts', None)
         option_dict = {}
-        cnt = 0
-        
-        if text_options:            
-            cnt += len(text_options)            
+        cnt = 0        
+        if text_options:                      
+            cnt += len(text_options)
+            print(f"text_options {len(text_options)}")
             option_dict.update(self.extract_text_options_from(text_options))
-        if simple_options:
+        elif simple_options:
             cnt += len(simple_options)
+            print(f"simple_options {len(simple_options)}")
             option_dict.update(self.extract_simple_options_from(simple_options))
-        if comb_options:
-            cnt += len(comb_options)
-            option_dict.update(self.extract_comb_options_from(comb_options))
-        if color_options:
+        elif comb_options:
+            opt_cnt, extracted_option = self.extract_comb_options_from(comb_options)
+            cnt += opt_cnt
+            option_dict.update(extracted_option)
+        elif color_options:
+            print(f"color_options {len(color_options)}")
             cnt += len(color_options)
             option_dict.update(self.extract_color_options_from(color_options))
-        if size_options:
+        elif size_options:
+            print(f"size_options {len(size_options)}")
             cnt += len(size_options)
             option_dict.update(self.extract_size_options_from(size_options))
-        if supplements:
+        elif supplements:
+            print(f"supplements {len(supplements)}")
             cnt += len(supplements)
             option_dict.update(self.extract_supplements_from(supplements))
         # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_options.json')
-        return json.dumps({"option_count": cnt, "options": option_dict}, ensure_ascii=False)
+        print({"option_count": cnt, "options": option_dict})
+        return {"option_count": cnt, "options": option_dict}
         
         
         # options_dict = data_dict['selectedOptions']
@@ -86,24 +92,38 @@ class FetchData:
             option_dict[option['groupName']] = [o['name'] for o in option['options']]
         # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_simple_options.json')
         return option_dict
-        
-        
+    
     def extract_comb_options_from(self, comb_options):
         option_dict = {}
-        
-        for option in comb_options:
-            option_dict[option['groupName']] = []            
-            
-        option_list = []
+        key_list = []
+        detail_list = []
+        for cnt, option in enumerate(comb_options, start=1):
+            print(cnt)
+            key_list.append(option['groupName'])
         options = comb_options[0]['options']
         for option in options:
-            option_list.append([option[o] for o in option if re.match(r'optionName\d', o)])
+            detail_list.append(', '.join([option[o] for o in option if re.match(r'optionName\d', o)]))
+                    
+        option_dict['-'.join(key_list)] = detail_list
+        return cnt, option_dict
             
-        for option in option_list:
-            for i, o in enumerate(option):
-                option_dict[list(option_dict.keys())[i]].append(o)
-        # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_comb_options.json')
-        return option_dict
+        
+    # def extract_comb_options_from(self, comb_options):
+    #     option_dict = {}
+        
+    #     for option in comb_options:
+    #         option_dict[option['groupName']] = []            
+            
+    #     option_list = []
+    #     options = comb_options[0]['options']
+    #     for option in options:
+    #         option_list.append([option[o] for o in option if re.match(r'optionName\d', o)])
+            
+    #     for option in option_list:
+    #         for i, o in enumerate(option):
+    #             option_dict[list(option_dict.keys())[i]].append(o)
+    #     # self.save_file(json.dumps(option_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_comb_options.json')
+    #     return option_dict
         
     def extract_size_options_from(self, size_options):
         option = size_options[self.pid]
