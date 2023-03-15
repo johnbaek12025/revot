@@ -66,7 +66,7 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         # Convert the dictionary to a JSON string and store it in the field
-        self.options = json.dumps(self.options)
+        self.options = json.dumps(self.options, ensure_ascii=False)
         super().save(*args, **kwargs)    
     
     

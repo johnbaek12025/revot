@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block contents %}
     <div class="mypage_zone">
         <div class="mypage_top">
@@ -20,7 +21,7 @@
                     <div class="col-6">
                         <div class="buy_box">
                             <button type="button" data-bs-toggle="modal"
-                                data-bs-target="#exampleModalToggle"><img src="img/i_plus_b.svg" alt="아이콘">구매권
+                                data-bs-target="#exampleModalToggle"><img src="{% static 'img/i_plus_b.svg'%}" alt="아이콘">구매권
                                 구매하기</button>
                             <dl>
                                 <dt>보유중인 구매권</dt>
@@ -30,7 +31,7 @@
                     </div>
                     <div class="col-6">
                         <div class="buy_box type2">
-                            <button type="button"><img src="img/i_plus_w.svg" alt="아이콘">리뷰권 구매하기</button>
+                            <button type="button"><img src="{% static 'img/i_plus_w.svg'%}" alt="아이콘">리뷰권 구매하기</button>
                             <dl>
                                 <dt>보유중인 구매권</dt>
                                 <dd>999개</dd>
