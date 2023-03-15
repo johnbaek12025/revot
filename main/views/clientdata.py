@@ -273,7 +273,7 @@ class AboutFolder(View):
         return BaseJsonFormat(is_success=True, data=list(page_obj.object_list))
     
     @ParsedClientView.init_parse
-    def get(self, req, folder_id, p_id=None):        
+    def get(self, req, folder_id=None, p_id=None):        
         if req.resolver_match.url_name == 'folder-product':
             q = Q(owner=self._client) & Q(folder=folder_id)
             res = self.jsonize_specific_data(req, q)                    
@@ -320,6 +320,9 @@ class AboutFolder(View):
                 p.delete()
                 p.save()
             res = BaseJsonFormat(is_success=True, msg='정상으로 삭제 되었습니다.')
+        elif req.resolver_match.url_name == 'folder-detail-count':
+            p_cnt = Product.objects.filter(Q(owner=self._client)& Q(folder__id=folder_id)).count()
+            res = BaseJsonFormat(is_success=True, data={"products_cnt": p_cnt})
         elif req.resolver_match.url_name == 'new-folder':
             referer = req.META.get('HTTP_REFERER')            
             ProductFolder(user=self._client).save()
