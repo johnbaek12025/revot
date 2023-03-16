@@ -28,9 +28,9 @@ class LoggedOut:
 
             # check if there is login cookie value
             login_cookie = req.COOKIES.get('login', None)
-            if login_cookie:
-                res = BaseJsonFormat()
-                return HttpResponse(res, content_type="application/json", status=200)
+            if login_cookie:                
+                return HttpResponseRedirect(reverse('main:main'))
+                
 
             # if it is, progress next logic
             return func(*args, **kwargs)
