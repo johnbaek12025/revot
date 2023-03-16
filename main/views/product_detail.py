@@ -12,7 +12,7 @@ class DataValueEmpty(ClientDataException):
 
 class FetchData:
     def __init__(self, pid, mall_name) -> None:
-        self.url = f"https://smartstore.naver.com/{mall_name}/products/{pid}"
+        self.url = f"https://smartstore.naver.com/{mall_name}/products/{pid}/"
         self.pid = pid
         self.mall_name = mall_name
         self.session = None

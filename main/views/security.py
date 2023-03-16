@@ -28,7 +28,7 @@ class LoggedOut:
 
             # check if there is login cookie value
             login_cookie = req.COOKIES.get('login', None)
-            if login_cookie:                
+            if login_cookie:           
                 return HttpResponseRedirect(reverse('main:main'))
                 
 
