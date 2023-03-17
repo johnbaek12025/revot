@@ -48,3 +48,22 @@ def random_date(start, end):
     int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
     random_second = randrange(int_delta)    
     return start + timedelta(seconds=random_second)
+
+def to_bool(x):
+    if x is None:
+        return None
+    if isinstance(x, str) and x.lower() == 'none':
+        return None
+    try:
+        if x.lower() in ['true', 'yes', 't']:            
+            return True
+        elif x.lower() in ['false', 'no', 'f']:
+            return False
+    except AttributeError:
+        
+        pass
+    try:
+        return bool(int(x))
+    except (ValueError, TypeError):
+        pass
+    raise ValueError("Unknown boolean specifier: '%s'." % x)

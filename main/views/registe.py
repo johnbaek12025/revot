@@ -247,8 +247,10 @@ class AboutReview(View):
             res = BaseJsonFormat(is_success=False, error_msg=err_msg)
             return HttpResponse(res, content_type="application/json", status=401)        
         ids = [int(x) for x in ids]
-        s = check_state_from(0)
-        ph = Review.objects.filter(id__in=ids, purchase__product__owner=self._client, state=s)
-        ph.delete()
+        s = check_state_from(0)        
+        for r in list(Review.objects.filter(id__in=ids, purchase__product__owner=self._client, state=s)):
+            img = Image.objects.filter(review=r)
+            img.delete()
+            r.delete()        
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
