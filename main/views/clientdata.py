@@ -61,13 +61,9 @@ class AboutProduct(View):
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
-            if p.options:                                
-                try:
-                    options = json.loads(p.options)
-                    option_count = options['option_count']
-                except TypeError:
-                    options = json.loads(json.loads(p.options))
-                    option_count = options['option_count']
+            if p.options:                                                
+                options = json.loads(p.options)
+                option_count = options['option_count']                
                 option_kind = list(options['options'].keys())
             else:
                 option_kind = []
@@ -123,13 +119,9 @@ class AboutProduct(View):
                 err_msg = '비정상 접근입니다.'
                 res = BaseJsonFormat(is_success=False, error_msg=err_msg)
                 return HttpResponse(res, content_type="application/json", status=401)        
-            else:
-                try:
-                    options = json.loads(p.options)
-                    option_count = options['option_count']
-                except TypeError:
-                    options = json.loads(json.loads(p.options))
-                    option_count = options['option_count']
+            else:                
+                options = json.loads(p.options)
+                option_count = options['option_count']
                 options = options['options']                              
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
@@ -162,6 +154,9 @@ class AboutProduct(View):
                 p.delete()
                 p.save()
             res = BaseJsonFormat(is_success=True, msg='정상으로 삭제 되었습니다.')
+        elif req.resolver_match.url_name == 'product-excel':
+            #TODO: make_a_excel_file
+            res = BaseJsonFormat(is_success=True, msg='')
         return HttpResponse(res, content_type="application/json", status=200)
     
     @csrf_exempt
@@ -219,10 +214,7 @@ class AboutProduct(View):
                 s = check_state_from(1)
                 p = Product(pid=pid, mid1=mid1, mid2=mid2, keyword=keyword, state=s, owner=self._client, mall_name=mall_name, **rest_data)
                 p.save()
-                res = BaseJsonFormat()
-        elif req.resolver_match.url_name == 'product-excel':
-        #     #TODO: excel-format -> List[Dict] and save to Product
-            res = BaseJsonFormat(is_success=True, msg='등록이 완료 되었습니다.')
+                res = BaseJsonFormat()        
         return HttpResponse(res, content_type="application/json", status=200)
     
         
@@ -249,13 +241,9 @@ class AboutFolder(View):
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
-            if p.options:                
-                try:
-                    options = json.loads(p.options)
-                    option_count = options['option_count']
-                except TypeError:
-                    options = json.loads(json.loads(p.options))
-                    option_count = options['option_count']
+            if p.options:                                
+                options = json.loads(p.options)
+                option_count = options['option_count']                
                 option_kind = list(options['options'].keys())
             else:
                 option_kind = []
@@ -292,13 +280,9 @@ class AboutFolder(View):
                 err_msg = '비정상 접근입니다.'
                 res = BaseJsonFormat(is_success=False, error_msg=err_msg)
                 return HttpResponse(res, content_type="application/json", status=401)        
-            else:
-                try:
-                    options = json.loads(p.options)
-                    option_count = options['option_count']
-                except TypeError:
-                    options = json.loads(json.loads(p.options))
-                    option_count = options['option_count']                
+            else:                
+                options = json.loads(p.options)
+                option_count = options['option_count']                
                 options = options['options']                            
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
@@ -326,7 +310,10 @@ class AboutFolder(View):
         elif req.resolver_match.url_name == 'new-folder':
             referer = req.META.get('HTTP_REFERER')            
             ProductFolder(user=self._client).save()
-            return redirect(referer)        
+            return redirect(referer)
+        elif req.resolver_match.url_name == 'folder-excel':
+            #TODO: make_a_excel_file
+            res = BaseJsonFormat(is_success=True, msg='')
         return HttpResponse(res, content_type="application/json", status=200)
         
     @csrf_exempt 
