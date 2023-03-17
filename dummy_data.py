@@ -45,7 +45,7 @@ def make_account():
     u.save()
     u2 = User(email_account='jllab002@gmail.com', password=make_password('jllab1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=100, purchase_ticket=100, self_code='SLOWER', higherarchy=u_s)
     u2.save()
-    u3 = User(email_account='test@test.com', password=make_password('test1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=100, purchase_ticket=100, self_code='SLOWER', higherarchy=u_s)
+    u3 = User(email_account='test@test.com', password=make_password('test1122'), agency_code='1111', recommendation_code='JEHOVA', authorization=True, phone='0102222244444', name='user2', authorized_by=s2 ,review_ticket=0, purchase_ticket=0, self_code='MICROS', higherarchy=u_s)
     u3.save()
     
     
@@ -129,8 +129,8 @@ if __name__ =='__main__':
     #     print(random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' '))
     users = make_account()
     user = User.objects.get(email_account='test@test.com')
-    for u in users:
-        make_products(u)
+    # for u in users:
+    #     make_products(u)
     # request_tickets()
     # purchase_registe()
     # date1 = input('날짜를 %Y-%m-%d 순으로 입력: ')

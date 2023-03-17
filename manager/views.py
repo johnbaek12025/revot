@@ -37,7 +37,7 @@ class TicketManage(View):
         return HttpResponse(res, content_type="application/json", status=200)
     
     @ParsedClientView.init_parse
-    def put(self, req):
+    def post(self, req):
         ids = json.loads(req.body.decode('utf-8'))['data']
         if not ids:
             error_msg = '비정상적인 접근입니다'

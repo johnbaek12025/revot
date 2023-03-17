@@ -96,7 +96,8 @@ class AboutPurchase(View):
     
     @ParsedClientView.init_parse
     def post(self, req):        
-        data = json.loads(req.body.decode('utf-8'))        
+        data = json.loads(req.body.decode('utf-8'))
+        print(data)    
         p_id = data['product']        
         selected_options = data['options']
         count = int(data['count'])        
@@ -114,14 +115,14 @@ class AboutPurchase(View):
         elif rd < cd:
             res = BaseJsonFormat(is_success=False, error_msg=f"선택된 날짜가 과거 입니다.")                
             return HttpResponse(res, content_type="application/json", status=401)
-        else:
+        else:                   
             if rt1 and rt2:
                 d1 = datetime.strptime(f"{rd} {rt1}", '%Y-%m-%d %H:%M')
                 d2 = datetime.strptime(f"{rd} {rt2}", '%Y-%m-%d %H:%M')
             else:                
                 d1 = datetime.strptime(f"{rd} 00:00", '%Y-%m-%d %H:%M')
-                d2 = datetime.strptime(f"{rd} 23:59", '%Y-%m-%d %H:%M')
-        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')        
+                d2 = datetime.strptime(f"{rd} 23:59", '%Y-%m-%d %H:%M')            
+        rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')
         s = check_state_from(0)        
         self._client.purchase_ticket -= 1
         if self._client.purchase_ticket < 0:            
@@ -131,9 +132,11 @@ class AboutPurchase(View):
             p_ob = Product.objects.get(id=p_id, owner=self._client)
         except Product.DoesNotExist:
             res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
-            return HttpResponse(res, content_type="application/json", status=401)        
+            return HttpResponse(res, content_type="application/json", status=401)
+        
         pp = Purchase(product=p_ob, reservation_date=rd, reservation_at=rt, state=s, count=count, selected_options=selected_options)
         pp.save()
+        print(pp)
         self._client.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)

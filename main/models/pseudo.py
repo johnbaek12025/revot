@@ -15,7 +15,7 @@ class Purchase(models.Model):
     reservation_at = models.CharField(max_length=8, db_index=True, null=True)
     done = models.CharField(max_length=8, db_index=True, null=True)    
     state = models.ForeignKey('main.State', on_delete=models.CASCADE)
-    error_msg = models.TextField(null=True, default=None, blank=True)
+    error_msg = models.TextField(null=True, blank=True, default=None)
     selected_options = models.TextField()
 
     def save(self, *args, **kwargs):
@@ -36,7 +36,7 @@ class Review(models.Model):
     done = models.CharField(max_length=8, db_index=True, null=True)
     contents = models.TextField(null=True, blank=True)
     auto_fill = models.BooleanField(default=False)
-    error_msg = models.TextField(null=True, default=None, blank=True)
+    error_msg = models.TextField(null=True, blank=True, default=None)
     state = models.ForeignKey('main.State', on_delete=models.CASCADE)
 
 class Image(models.Model):
