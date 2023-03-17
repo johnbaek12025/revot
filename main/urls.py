@@ -34,6 +34,7 @@ urlpatterns = [
     path('user/product/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-detail'),
     path('user/product/search/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='search-product'),
     path('user/product/excel/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-excel'),
+    #TODO
     path('user/product/delete/', AboutProduct.as_view(http_method_names=['delete']), name='products-delete'),
     
     path('user/folder/<int:folder_id>/count/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-detail-count'),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('user/folder/<int:folder_id>/product/search/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-search-product'),
     path('user/folder/<int:folder_id>/product/delete/', AboutFolder.as_view(http_method_names=['delete']), name='folder-products-delete'),
     path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['put'])), name='product-assign'),        
+    #TODO
     path('user/folder/<int:folder_id>/excel/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-excel'),
     
     path('user/data/detail/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='my-data-detail'),

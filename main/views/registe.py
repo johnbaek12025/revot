@@ -194,13 +194,16 @@ class AboutReview(View):
         print(self._client)
         files = req.FILES['file']
         data = json.loads(req.body.decode('utf-8'))
-        auto_fill = data.get('auto_fill', None)
+        auto_fill = data.get('auto_fill', False)
         r_contents = data.get('review', None)
         purchase_id = int(data['purchase'])
         rd = data['reservation_date']
         rt1 = data.get('rt1', None)
         rt2 = data.get('rt2', None)
-        cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')        
+        cd, ct = datetime.now().strftime('%Y-%m-%d %H:%M').split(' ')
+        
+        res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
+        return HttpResponse(res, content_type="application/json", status=200)
         if rd == cd:
             if rt1 and rt2:
                 d1 = datetime.strptime(f"{cd} {rt1}", '%Y-%m-%d %H:%M')
