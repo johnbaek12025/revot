@@ -190,12 +190,13 @@ class AboutReview(View):
         return HttpResponse(res, content_type="application/json", status=200)
     
     @ParsedClientView.init_parse
-    def post(self, req):
-        print(self._client)
-        files = req.FILES['file']
-        data = json.loads(req.body.decode('utf-8'))
-        auto_fill = data.get('auto_fill', False)
-        r_contents = data.get('review', None)
+    def post(self, req):        
+        data = req.POST
+        files = req.FILES                
+        auto_fill = to_bool(data.get('auto_fill', False))
+        contents = data.get('contents', None)
+        if auto_fill:
+            contents = ''        
         purchase_id = int(data['purchase'])
         rd = data['reservation_date']
         rt1 = data.get('rt1', None)
@@ -225,15 +226,9 @@ class AboutReview(View):
         except Purchase.DoesNotExist:
             res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
             return HttpResponse(res, content_type="application/json", status=401)        
-        
-        if not auto_fill:
-            contents = r_contents
-        else:
-            contents = None
-            #TODO: implement api for getting review content from outer service
         r = Review(purchase=po, reservation_at=rd, reservation_date=rt, state=s, contents=contents)
         r.save()
-        for f in files:
+        for k, f in files.items():            
             i = Image(img=f, review=r)
             i.save()        
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
