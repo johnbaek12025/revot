@@ -195,7 +195,7 @@ class AboutReview(View):
             f_cnt = Review.objects.filter(Q(purchase__product__owner=self._client)&Q(state=f)).count()            
             data = {"total": p_cnt+s_cnt+f_cnt,"progress": p_cnt, "success": s_cnt, "fail": f_cnt}
         elif req.resolver_match.url_name == 'detail':
-            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client) & Q(id=id)))
+            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client)&Q(reservation_date=r_date)& Q(id=id)))
             data = self.make_pagination(req, r_data)
         elif req.resolver_match.url_name == 'total':
             r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client)))
