@@ -1,7 +1,7 @@
 import json
 from django.db import models
 from django.utils.timezone import now
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Purchase(models.Model):
     class Meta:    
@@ -31,12 +31,13 @@ class Review(models.Model):
         return str(now().date())
     birth = models.DateTimeField(default=now)
     purchase = models.ForeignKey('main.Purchase', on_delete=models.CASCADE)
-    reservation_date = models.CharField(default=today_date, db_index=True, max_length=8)
-    reservation_at = models.CharField(max_length=20, db_index=True, null=True)
+    reservation_date = models.CharField(default=today_date, db_index=True, max_length=20)
+    reservation_at = models.CharField(max_length=8, db_index=True, null=True)
     done = models.CharField(max_length=8, db_index=True, null=True)
     contents = models.TextField(null=True, blank=True)
     auto_fill = models.BooleanField(default=False)
     error_msg = models.TextField(null=True, blank=True, default=None)
+    star = models.IntegerField( validators=[MaxValueValidator(5), MinValueValidator(0)], default=0)
     state = models.ForeignKey('main.State', on_delete=models.CASCADE)
 
 class Image(models.Model):

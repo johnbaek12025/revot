@@ -3,7 +3,7 @@ from django.db import OperationalError
 
 from django.http import HttpResponse
 from django.views import View
-from main.commonutility import BaseJsonFormat, check_state_from, random_date
+from main.commonutility import BaseJsonFormat, check_state_from, random_date, to_bool
 from main.models.client import Product
 from main.models.pseudo import Image, Purchase, Review
 from main.views.security import ParsedClientView
@@ -20,13 +20,13 @@ class AboutPurchase(View):
         data = [{
                     "id": p.id,
                     "reservation_date": p.reservation_date, 
-                    "reservation_at": p.reservation_at, 
-                    "done_time": p.done,
+                    "reservation_at": p.reservation_at,                     
                     "pid": p.product.pid,
                     "mid1": p.product.mid1,
                     "mid2": p.product.mid2, 
                     "state":p.state.state, 
                     "count": p.count,
+                    "done": p.done,
                     "price": int(p.product.price) * p.count,
                     "options": json.loads(p.selected_options),                    
                     "option_count": json.loads(p.product.options)['option_count'],
@@ -39,15 +39,16 @@ class AboutPurchase(View):
         return data
     
     @ParsedClientView.init_parse
-    def get(self, req, p_date=None, id=None):        
+    def get(self, req, p_date=None, id=None, yr_mon=None):
+        print(yr_mon)
         if req.resolver_match.url_name == 'date-purchase':
-            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=p_date)).select_related('product'))
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=p_date)).select_related('product'))            
             data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'detail':            
             purchase_list= list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date, id=int(id)).select_related('product'))
             data = self.make_pagination(req, purchase_list)
-        elif req.resolver_match.url_name == 'date-count':
-            data = list(Purchase.objects.filter(Q(product__owner=self._client)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
+        elif req.resolver_match.url_name == 'date-count':            
+            data = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
         elif req.resolver_match.url_name == 'state-count':
             i = check_state_from(0)
             s = check_state_from(1)
@@ -159,28 +160,59 @@ class AboutPurchase(View):
 
 
 class AboutReview(View):
+    def make_pagination(self, req, data:list):        
+        data = [{   
+                "id": r.id,
+                "reservation_date": r.reservation_date, 
+                "reservation_at": r.reservation_at,                    
+                "img": [i.img for i in list(Image.objects.filter(review__id=r.id))],
+                "img_count": len([i.img for i in list(Image.objects.filter(review__id=r.id))]),
+                "state":r.state.state,
+                "done": r.done,
+                "auto_fill": r.auto_fill,
+                "contents": r.contents,               
+                    } for r in data]        
+        pg_num = req.GET.get('page', 1)        
+        sc = req.GET.get('sc', 10)
+        paginator = Paginator(data, per_page=sc)
+        page_obj = paginator.get_page(pg_num)
+        data = list(page_obj.object_list)          
+        return data
+    
     @ParsedClientView.init_parse
-    def get(self, req):
-        if req.resolver_match.url_name == 'date-count':
-            pass
+    def get(self, req, r_date=None, id=None, yr_mon=None):
+        if req.resolver_match.url_name == 'date-count':            
+            data = list(Review.objects.filter(Q(purchase__product__owner=self._client)&Q(reservation_date__contains=yr_mon)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
+            print(data)
         elif req.resolver_match.url_name == 'date-review':
-            pass
+            r_data = list(Review.objects.filter(Q(product__owner=self._client)&Q(reservation_date=r_date)))            
+            data = self.make_pagination(req, r_data)
         elif req.resolver_match.url_name == 'state-count':
             i = check_state_from(0)
             s = check_state_from(1)
             f = check_state_from(2)
-            p_cnt = Review.objects.filter(Q(product__owner=self._client)&Q(state=i)).count()
-            s_cnt = Review.objects.filter(Q(product__owner=self._client)&Q(state=s)).count()
-            f_cnt = Review.objects.filter(Q(product__owner=self._client)&Q(state=f)).count()            
+            p_cnt = Review.objects.filter(Q(purchase__product__owner=self._client)&Q(state=i)).count()
+            s_cnt = Review.objects.filter(Q(purchase__product__owner=self._client)&Q(state=s)).count()
+            f_cnt = Review.objects.filter(Q(purchase__product__owner=self._client)&Q(state=f)).count()            
             data = {"total": p_cnt+s_cnt+f_cnt,"progress": p_cnt, "success": s_cnt, "fail": f_cnt}
         elif req.resolver_match.url_name == 'detail':
-            pass
+            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client) & Q(id=id)))
+            data = self.make_pagination(req, r_data)
         elif req.resolver_match.url_name == 'total':
-            pass
+            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client)))
+            data = self.make_pagination(req, r_data)
+        elif req.resolver_match.url_name == 'success':
+            s = check_state_from(1)
+            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client), Q(state=s)))
+            data = self.make_pagination(req, r_data)
         elif req.resolver_match.url_name == 'progress':
-            pass
+            i = check_state_from(0)
+            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client), Q(state=i)))
+            data = self.make_pagination(req, r_data)
         elif req.resolver_match.url_name == 'fail':
-            pass
+            f = check_state_from(2)
+            r_data = list(Review.objects.filter(Q(purchase__product__owner=self._client), Q(state=f)))
+            data = self.make_pagination(req, r_data)
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=data)
         return HttpResponse(res, content_type="application/json", status=200)
     
@@ -192,11 +224,13 @@ class AboutReview(View):
     @ParsedClientView.init_parse
     def post(self, req):        
         data = req.POST
-        files = req.FILES                
+        files = req.FILES
         auto_fill = to_bool(data.get('auto_fill', False))
         contents = data.get('contents', None)
+        star_count = data.get('star_count', 1)
+        print(auto_fill)
         if auto_fill:
-            contents = ''        
+            contents = ''    
         purchase_id = int(data['purchase'])
         rd = data['reservation_date']
         rt1 = data.get('rt1', None)
@@ -226,11 +260,12 @@ class AboutReview(View):
         except Purchase.DoesNotExist:
             res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
             return HttpResponse(res, content_type="application/json", status=401)        
-        r = Review(purchase=po, reservation_at=rd, reservation_date=rt, state=s, contents=contents)
+        r = Review(purchase=po, reservation_at=rt, reservation_date=rd, auto_fill=auto_fill ,state=s, contents=contents, star=star_count)
         r.save()
-        for k, f in files.items():            
-            i = Image(img=f, review=r)
-            i.save()        
+        if files:
+            for k, f in files.items():
+                i = Image(img=f, review=r)
+                i.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     
