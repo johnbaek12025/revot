@@ -72,8 +72,9 @@ urlpatterns = [
     path('registe/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['post'])), name='purchase'),
     path('delete/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
         
-    path('review/count/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
-    path('history/review//<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
+    path('review/count/<str:yr_mon>/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
+    path('review/state/count/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='state-count'),
+    path('history/review/<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
     path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),    
     path('review/history/total/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='total'),
     path('review/history/progress/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='progress'),

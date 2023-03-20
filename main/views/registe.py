@@ -158,7 +158,6 @@ class AboutPurchase(View):
         return HttpResponse(res, content_type="application/json", status=200)
 
 
-
 class AboutReview(View):
     def make_pagination(self, req, data:list):        
         data = [{   
