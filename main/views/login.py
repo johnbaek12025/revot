@@ -55,7 +55,7 @@ class LogIn(View):
                 )
                 if not remember_account:
                     req.session.set_expiry(0)
-                if not remember_account:
+                else:
                     req.session.set_expiry(1209600)
                 res = HttpResponseRedirect(reverse('main:main'))
                 res.set_cookie('login', login_cookie_value, max_age=60 * 60 * 24 * 6, httponly=True)                
