@@ -74,7 +74,7 @@ urlpatterns = [
         
     path('review/count/<str:yr_mon>/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
     path('review/state/count/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='state-count'),
-    path('history/review/<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
+    path('history/review/<str:r_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
     path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),
     path('review/history/total/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='total'),
     path('review/history/progress/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='progress'),
