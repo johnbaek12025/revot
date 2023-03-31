@@ -22,6 +22,7 @@ class AboutPurchase(View):
                     "reservation_date": p.reservation_date, 
                     "reservation_at": p.reservation_at,                     
                     "pid": p.product.pid,
+                    "name": p.product.name,
                     "mid1": p.product.mid1,
                     "mid2": p.product.mid2, 
                     "state":p.state.state, 
@@ -223,13 +224,9 @@ class AboutReview(View):
     @ParsedClientView.init_parse
     def post(self, req):        
         data = req.POST
-        files = req.FILES
-        auto_fill = to_bool(data.get('auto_fill', False))
+        files = req.FILES        
         contents = data.get('contents', None)
         star_count = data.get('star_count', 1)
-        print(auto_fill)
-        if auto_fill:
-            contents = ''    
         purchase_id = int(data['purchase'])
         rd = data['reservation_date']
         rt1 = data.get('rt1', None)
@@ -259,7 +256,7 @@ class AboutReview(View):
         except Purchase.DoesNotExist:
             res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
             return HttpResponse(res, content_type="application/json", status=401)        
-        r = Review(purchase=po, reservation_at=rt, reservation_date=rd, auto_fill=auto_fill ,state=s, contents=contents, star=star_count)
+        r = Review(purchase=po, reservation_at=rt, reservation_date=rd, state=s, contents=contents, star=star_count)
         r.save()
         if files:
             for k, f in files.items():

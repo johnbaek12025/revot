@@ -38,12 +38,12 @@ urlpatterns = [
     path('user/product/delete/', AboutProduct.as_view(http_method_names=['delete']), name='products-delete'),
     
     path('user/folder/<int:folder_id>/count/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-detail-count'),
-    path('user/folder/<int:folder_id>/product/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-product'),    
-    path('user/folder/<int:folder_id>/product/delete/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='folder-product-delete'),    
+    path('user/folder/<int:folder_id>/product/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-product'),
+    path('user/folder/<int:folder_id>/product/delete/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='folder-product-delete'),
     path('user/folder/<int:folder_id>/product/<int:p_id>/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-product-detail'),
     path('user/folder/<int:folder_id>/product/search/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-search-product'),
     path('user/folder/<int:folder_id>/product/delete/', AboutFolder.as_view(http_method_names=['delete']), name='folder-products-delete'),
-    path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['put'])), name='product-assign'),        
+    path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['put'])), name='product-assign'),
     #TODO
     path('user/folder/<int:folder_id>/excel/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-excel'),
     
@@ -56,7 +56,7 @@ urlpatterns = [
     path('history/reviewticket/request/count/', LoggedIn()(AboutTicket.as_view(http_method_names=['get'])), name='review-ticket-count'),
     path('history/purchaseticket/request/count/', LoggedIn()(AboutTicket.as_view(http_method_names=['get'])), name='purchase-ticket-count'),
     path('request/review/ticket/', LoggedIn()(AboutTicket.as_view(http_method_names=['post'])), name='review-ticket'),
-    path('request/purchase/ticket/', LoggedIn()(AboutTicket.as_view(http_method_names=['post'])), name='purchase-ticket'),    
+    path('request/purchase/ticket/', LoggedIn()(AboutTicket.as_view(http_method_names=['post'])), name='purchase-ticket'),
     path('request/review/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='review-ticket'),
     path('request/purchase/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='purchase-ticket'),
     
@@ -75,13 +75,12 @@ urlpatterns = [
     path('review/count/<str:yr_mon>/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
     path('review/state/count/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='state-count'),
     path('history/review/<str:p_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
-    path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),    
+    path('detail/review/<str:date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),
     path('review/history/total/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='total'),
     path('review/history/progress/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='progress'),
     path('review/history/success/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='success'),
     path('review/history/fail/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='fail'),
     path('review/update/', LoggedIn()(AboutReview.as_view(http_method_names=['put'])), name='review-update'),
-    path('registe/review/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review'),    
-    path('delete/review/', LoggedIn()(AboutReview.as_view(http_method_names=['delete'])), name='delete-purchase'),        
+    path('registe/review/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review'),
+    path('delete/review/', LoggedIn()(AboutReview.as_view(http_method_names=['delete'])), name='delete-purchase'),
 ]
-

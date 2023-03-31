@@ -32,9 +32,9 @@ class FetchData:
         info = bs(info, 'html.parser')
         options_info = info.find_all('script')[0]
         data_dict = json.loads(options_info.text)
-        name = data_dict['name']
+        name = data_dict['name'].split(' : ')[0]
         img_url = data_dict['image']
-        price = data_dict['offers']['price']        
+        price = data_dict['offers']['price']
         return {"name": name, "img_url": img_url, "price": price}
         # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_product.json')
     
