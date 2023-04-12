@@ -72,14 +72,14 @@ class FetchData:
             print(f"size_options {len(size_options)}")
             cnt += len(size_options)
             option_dict.update(self.extract_size_options_from(size_options))
+        options_info = {"option_count": cnt, "options": option_dict}
         if supplements:
             print(supplements, len(supplements))
             print(f"supplements {len(supplements)}")
             cnt += len(supplements)
-            option_dict.update(self.extract_supplements_from(supplements))
-        # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_options.json')
-        print({"option_count": cnt, "options": option_dict})
-        return {"option_count": cnt, "options": option_dict}
+            options_info.update({"supplements": self.extract_supplements_from(supplements)})
+        # self.save_file(json.dumps(data_dict, ensure_ascii=False), f'checking_data/{self.pid}_{self.mall_name}_options.json')        
+        return options_info
         
         
         # options_dict = data_dict['selectedOptions']

@@ -67,20 +67,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'main.apps.MainConfig',
     # 'devoperator.apps.DevoperatorConfig',
     'manager.apps.ManagerConfig',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = [    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',    
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+SESSION_COOKIE_SAMESITE = None
 
 ROOT_URLCONF = 'barley.urls'
 
@@ -157,3 +162,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = os.path.join(BASE_DIR, '_staticfilesall')   # cmd: python manage.py collectstatic
+
+LOG_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'log', 'errorLog.log'))
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+                    'datefmt': "%d/%b/%Y %H:%M:%S"}, 'simple': {'format': '%(levelname)s %(message)s'}, 
+                 }, 
+    'handlers': {
+        'file': {'level': 'DEBUG', 'class': 'logging.handlers.RotatingFileHandler', 'filename': LOG_FILE,
+                 'formatter': 'verbose', 'maxBytes': 1024 * 1024 * 10, 'backupCount': 5, }, 
+        },
+    'loggers': {'django': {'handlers': ['file'], 'propagate': True, 'level': 'ERROR', },
+                'django.request': {'handlers': ['file'], 'propagate': False, 'level': 'INFO', },
+                'main': {'handlers': ['file'], 'level': 'ERROR', 'propagate': True},
+                'devoperator': {'handlers': ['file'], 'level': 'ERROR', 'propagate': True},
+                }
+}
+

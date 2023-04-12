@@ -65,8 +65,14 @@ class AboutProduct(View):
                 options = json.loads(p.options)
                 option_count = options['option_count']                
                 option_kind = list(options['options'].keys())
+                supplements = options.get('supplements')
+                if supplements:
+                    supplements = list(supplements.keys())            
             else:
                 option_kind = []
+                supplements = options.get('supplements')
+                if supplements:
+                    supplements = list(supplements.keys())            
                 option_count = 0
             products_data.append({
                                     "id": p.id,
@@ -80,6 +86,7 @@ class AboutProduct(View):
                                     "img": p.img_url,
                                     "searching_type": p.searching_type,
                                     "option_count": option_count,
+                                    "supplements": supplements,
                                     "options": option_kind,
                                 })
         pg_num = req.GET.get('page', 1)        
@@ -122,7 +129,8 @@ class AboutProduct(View):
             else:                
                 options = json.loads(p.options)
                 option_count = options['option_count']
-                options = options['options']                              
+                option_detail = options['options']  
+                supplements = options.get('supplements')
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
@@ -135,7 +143,8 @@ class AboutProduct(View):
                     "pid": p.pid,
                     "img": p.img_url,
                     "option_count": option_count,                    
-                    "option_detail": options,
+                    "option_detail": option_detail,
+                    "supplements": supplements,
                     "searching_type": p.searching_type,
                 }
                 res = BaseJsonFormat(is_success=True, data=data)

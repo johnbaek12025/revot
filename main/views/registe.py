@@ -40,16 +40,16 @@ class AboutPurchase(View):
         return data
     
     @ParsedClientView.init_parse
-    def get(self, req, p_date=None, id=None, yr_mon=None):
-        print(yr_mon)
+    def get(self, req, p_date=None, id=None, yr_mon_d=None):
+        print(yr_mon_d)
         if req.resolver_match.url_name == 'date-purchase':
-            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=p_date)).select_related('product'))            
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon_d)).select_related('product'))            
             data = self.make_pagination(req, purchase_list)
         elif req.resolver_match.url_name == 'detail':            
-            purchase_list= list(Purchase.objects.filter(product__owner=self._client, reservation_date=p_date, id=int(id)).select_related('product'))
+            purchase_list= list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=p_date)&Q(id=int(id))).select_related('product'))
             data = self.make_pagination(req, purchase_list)
-        elif req.resolver_match.url_name == 'date-count':            
-            data = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
+        elif req.resolver_match.url_name == 'date-count':
+            data = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon_d)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
         elif req.resolver_match.url_name == 'state-count':
             i = check_state_from(0)
             s = check_state_from(1)
@@ -100,9 +100,9 @@ class AboutPurchase(View):
     def post(self, req):        
         data = json.loads(req.body.decode('utf-8'))
         print(data)    
-        p_id = data['product']        
+        p_id = data['product']
         selected_options = data['options']
-        count = int(data['count'])        
+        count = int(data['count'])
         rd = data['reservation_date']
         rt1 = data.get('rt1', None)
         rt2 = data.get('rt2', None)
@@ -180,9 +180,9 @@ class AboutReview(View):
         return data
     
     @ParsedClientView.init_parse
-    def get(self, req, r_date=None, id=None, yr_mon=None):
+    def get(self, req, r_date=None, id=None, yr_mon_d=None):
         if req.resolver_match.url_name == 'date-count':            
-            data = list(Review.objects.filter(Q(purchase__product__owner=self._client)&Q(reservation_date__contains=yr_mon)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
+            data = list(Review.objects.filter(Q(purchase__product__owner=self._client)&Q(reservation_date__contains=yr_mon_d)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
             print(data)
         elif req.resolver_match.url_name == 'date-review':
             r_data = list(Review.objects.filter(Q(product__owner=self._client)&Q(reservation_date=r_date)))            

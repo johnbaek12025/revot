@@ -18,6 +18,7 @@ from main.models.client import Product, User, State, ProductFolder
 from main.models.clientdata import RequestTicket
 from main.models.pseudo import Purchase, Review
 from django.contrib.auth.hashers import make_password
+from main.models.security import LoginSession
 
 def check_state_from(state_n=0):
     try:
@@ -127,8 +128,12 @@ if __name__ =='__main__':
     # d2 = datetime.strptime('2024/1/1 4:50 AM', '%Y/%m/%d %I:%M %p')
     # for _ in range(10):
     #     print(random_date(d1, d2).strftime('%y-%m-%d %H:%M').split(' '))
-    users = make_account()
+    # users = make_account()
     user = User.objects.get(email_account='test@test.com')
+    print(user)
+    x = LoginSession.objects.filter(id=54, account=user)    
+    print(x)
+    
     # for u in users:
     #     make_products(u)
     # request_tickets()

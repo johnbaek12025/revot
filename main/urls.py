@@ -42,11 +42,10 @@ urlpatterns = [
     path('user/folder/<int:folder_id>/product/delete/<int:p_id>/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='folder-product-delete'),
     path('user/folder/<int:folder_id>/product/<int:p_id>/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-product-detail'),
     path('user/folder/<int:folder_id>/product/search/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-search-product'),
-    path('user/folder/<int:folder_id>/product/delete/', AboutFolder.as_view(http_method_names=['delete']), name='folder-products-delete'),
+    path('user/folder/<int:folder_id>/product/delete/', LoggedIn()(AboutFolder.as_view(http_method_names=['delete'])), name='folder-products-delete'),
     path('user/folder/', LoggedIn()(AboutFolder.as_view(http_method_names=['put'])), name='product-assign'),
     #TODO
-    path('user/folder/<int:folder_id>/excel/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-excel'),
-    
+    path('user/folder/<int:folder_id>/excel/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='folder-excel'),    
     path('user/data/detail/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='my-data-detail'),
     path('user/ticket/count/', LoggedIn()(RequestUserInfo.as_view(http_method_names=['get'])), name='my-ticket'),
     
@@ -60,7 +59,7 @@ urlpatterns = [
     path('request/review/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='review-ticket'),
     path('request/purchase/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='purchase-ticket'),
     
-    path('purchase/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-count'),
+    path('purchase/count/<str:yr_mon_d>', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-count'),
     path('purchase/state/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='state-count'),
     path('history/purchase/<str:p_date>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-purchase'),
     path('history/purchase/<str:p_date>/info/<str:id>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='detail'),
@@ -72,7 +71,7 @@ urlpatterns = [
     path('registe/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['post'])), name='purchase'),
     path('delete/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
         
-    path('review/count/<str:yr_mon>/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
+    path('review/count/<str:yr_mon_d>/',LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-count'),
     path('review/state/count/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='state-count'),
     path('history/review/<str:r_date>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='date-review'),
     path('detail/review/<str:r_date>/info/<str:id>/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='detail'),
