@@ -84,7 +84,7 @@ class LogIn(View):
 class LogOut(View):
     @transaction.atomic
     def get(self, req):        
-        res = HttpResponseRedirect(reverse('main:login'))
+        res = HttpResponseRedirect(reverse('main:login2'))
         cookie_value = req.COOKIES.get('login', None)
         if cookie_value:
             login_session = LoginSession.objects.get(value=cookie_value)

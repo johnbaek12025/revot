@@ -22,8 +22,8 @@ class RequestTicket(models.Model):
                     "depositor_name": self.depositor_name, 
                     "bank":self.bank, 
                     "state": self.state.state,
-                    "higherarchy": self.user.higherarchy.state,
+                    # "higherarchy": self.user.higherarchy.state,
                     "account": self.user.email_account,
-                    "birth": self.birth.strftime('%y-%m-%d')
+                    "r_date": self.birth.strftime('%y-%m-%d')
                 }
                 

@@ -65,20 +65,20 @@ class AboutProduct(View):
                 options = json.loads(p.options)
                 option_count = options['option_count']                
                 option_kind = list(options['options'].keys())
-                supplements = options.get('supplements')
-                if supplements:
-                    supplements = list(supplements.keys())            
+                supplements_kind = options.get('supplements')
+                if supplements_kind:
+                    supplements_kind = list(supplements_kind.keys())            
             else:
                 option_kind = []
-                supplements = options.get('supplements')
-                if supplements:
-                    supplements = list(supplements.keys())            
+                supplements_kind = options.get('supplements')
+                if supplements_kind:
+                    supplements_kind = list(supplements_kind.keys())            
                 option_count = 0
             products_data.append({
                                     "id": p.id,
-                                    "name": p.name, 
+                                    "p_name": p.name, 
                                     "mall_name": p.mall_name, 
-                                    "birth": p.birth.strftime('%Y-%m-%d'),
+                                    "r_date": p.birth.strftime('%Y-%m-%d'),
                                     "keyword": keywords,
                                     "mid1": p.mid1,
                                     "mid2": p.mid2,
@@ -86,8 +86,8 @@ class AboutProduct(View):
                                     "img": p.img_url,
                                     "searching_type": p.searching_type,
                                     "option_count": option_count,
-                                    "supplements": supplements,
-                                    "options": option_kind,
+                                    "supplements": supplements_kind,
+                                    "option_kind": option_kind,
                                 })
         pg_num = req.GET.get('page', 1)        
         sc = req.GET.get('sc', 10)
@@ -130,13 +130,13 @@ class AboutProduct(View):
                 options = json.loads(p.options)
                 option_count = options['option_count']
                 option_detail = options['options']  
-                supplements = options.get('supplements')
+                supplements_detail = options.get('supplements')                
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
-                    "name": p.name, 
+                    "p_name": p.name, 
                     "mall_name": p.mall_name, 
-                    "birth": p.birth.strftime('%Y-%m-%d'),
+                    "r_date": p.birth.strftime('%Y-%m-%d'),
                     "keyword": keywords,
                     "mid1": p.mid1,
                     "mid2": p.mid2,
@@ -144,7 +144,7 @@ class AboutProduct(View):
                     "img": p.img_url,
                     "option_count": option_count,                    
                     "option_detail": option_detail,
-                    "supplements": supplements,
+                    "supplements_detail": supplements_detail,
                     "searching_type": p.searching_type,
                 }
                 res = BaseJsonFormat(is_success=True, data=data)
@@ -254,14 +254,20 @@ class AboutFolder(View):
                 options = json.loads(p.options)
                 option_count = options['option_count']                
                 option_kind = list(options['options'].keys())
+                supplements_kind = options.get('supplements')
+                if supplements_kind:
+                    supplements_kind = list(supplements_kind.keys())                            
             else:
                 option_kind = []
-                option_count = 0
+                supplements_kind = options.get('supplements')
+                if supplements_kind:
+                    supplements_kind = list(supplements_kind.keys())            
+                option_count = 0                            
             products_data.append({
                                     "id": p.id,
-                                    "name": p.name, 
+                                    "p_name": p.name, 
                                     "mall_name": p.mall_name, 
-                                    "birth": p.birth.strftime('%Y-%m-%d'),
+                                    "r_date": p.birth.strftime('%Y-%m-%d'),
                                     "keyword": keywords,
                                     "mid1": p.mid1,
                                     "mid2": p.mid2,
@@ -269,7 +275,8 @@ class AboutFolder(View):
                                     "img": p.img_url,
                                     "searching_type": p.searching_type,
                                     "option_count": option_count,
-                                    "options": option_kind,
+                                    "supplements_kind": supplements_kind,
+                                    "option_kind": option_kind,
                                 })
         pg_num = req.GET.get('page', 1)        
         sc = req.GET.get('sc', 10)
@@ -292,20 +299,22 @@ class AboutFolder(View):
             else:                
                 options = json.loads(p.options)
                 option_count = options['option_count']                
-                options = options['options']                            
-                keywords = [k for k in p.keyword.split(', ')]
+                option_detail = options['options']  
+                supplements_detail = options.get('supplements')                
+                keywords = [k for k in p.keyword.split(', ')]                
                 data = {
                     "id": p.id,
-                    "name": p.name, 
+                    "p_name": p.name, 
                     "mall_name": p.mall_name, 
-                    "birth": p.birth.strftime('%Y-%m-%d'),
+                    "r_date": p.birth.strftime('%Y-%m-%d'),
                     "keyword": keywords,
                     "mid1": p.mid1,
                     "mid2": p.mid2,
                     "pid": p.pid,
                     "img": p.img_url,
                     "option_count": option_count,                    
-                    "option_detail": options,
+                    "option_detail": option_detail,
+                    "supplements": supplements_detail,
                     "searching_type": p.searching_type,
                 }
                 res = BaseJsonFormat(is_success=True, data=data)

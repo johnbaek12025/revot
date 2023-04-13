@@ -77,7 +77,7 @@ class LoggedIn:
                     break            
             if req is None:
                 raise Exception('req 인자를 찾지 못하였습니다.')
-            res = HttpResponseRedirect(reverse('main:login'))
+            res = HttpResponseRedirect(reverse('main:login2'))
 
             try:                
                 client = get_client_object(req=req)                
@@ -89,7 +89,7 @@ class LoggedIn:
                 return res
             if client is None or not client.authorization:
                 res.delete_cookie('login')
-                res = HttpResponseRedirect(reverse('main:login'))
+                res = HttpResponseRedirect(reverse('main:login2'))
                 return res            
             
             if self.hierarchies:
@@ -114,30 +114,26 @@ class LoggedIn:
 def get_client_object(account=None, req=None, session_birth_within=7):    
     if (account, req) == (None, None):
         raise ValueError('account, req 둘 중 최소 하나는 입력해줘야 합니다.')
-    if req.COOKIES['login'] != 'pGLIHQMb1YI8kQHlh0eLXDVqQoXjgMXw8AQXwoCFs6XZ0C6CLVQisXlHLk9e29xzhCD':
-        if req and account is None:
+    
+    if req and account is None:
+        try:
+            login_session_value = req.COOKIES['login']
+        except KeyError:
+            raise SessionCookieNonExists
+        else:
             try:
-                login_session_value = req.COOKIES['login']
-            except KeyError:
-                raise SessionCookieNonExists
+                login_session = LoginSession.objects.get(value=login_session_value, logged_out=False)
+                account = login_session.account
+            except LoginSession.DoesNotExist:
+                raise SessionValueWrong
             else:
                 try:
-                    login_session = LoginSession.objects.get(value=login_session_value, logged_out=False)
-                    account = login_session.account
+                    login_session = LoginSession.objects.get(
+                        value=login_session_value,
+                        birth__gte=now()-timedelta(days=session_birth_within)
+                    )
                 except LoginSession.DoesNotExist:
-                    raise SessionValueWrong
-                else:
-                    try:
-                        login_session = LoginSession.objects.get(
-                            value=login_session_value,
-                            birth__gte=now()-timedelta(days=session_birth_within)
-                        )
-                    except LoginSession.DoesNotExist:
-                        raise SessionExpiration
-    else:
-        login_session_value = req.COOKIES['login']
-        login_session = LoginSession.objects.get(value=login_session_value, logged_out=False)
-        account = login_session.account
+                    raise SessionExpiration    
     return account
 
 def generate_login_cookie(account, user_agent, ip, session_cls=LoginSession):

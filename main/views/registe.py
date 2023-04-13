@@ -22,12 +22,12 @@ class AboutPurchase(View):
                     "reservation_date": p.reservation_date, 
                     "reservation_at": p.reservation_at,                     
                     "pid": p.product.pid,
-                    "name": p.product.name,
+                    "p_name": p.product.name,
                     "mid1": p.product.mid1,
                     "mid2": p.product.mid2, 
                     "state":p.state.state, 
                     "count": p.count,
-                    "done": p.done,
+                    "finish_datetime": p.done,
                     "price": int(p.product.price) * p.count,
                     "options": json.loads(p.selected_options),                    
                     "option_count": json.loads(p.product.options)['option_count'],
@@ -134,8 +134,7 @@ class AboutPurchase(View):
             p_ob = Product.objects.get(id=p_id, owner=self._client)
         except Product.DoesNotExist:
             res = BaseJsonFormat(is_success=False, error_msg=f"해당 상품이 존재하지 않습니다.")
-            return HttpResponse(res, content_type="application/json", status=401)
-        
+            return HttpResponse(res, content_type="application/json", status=401)        
         pp = Purchase(product=p_ob, reservation_date=rd, reservation_at=rt, state=s, count=count, selected_options=selected_options)
         pp.save()
         print(pp)
@@ -168,8 +167,7 @@ class AboutReview(View):
                 "img": [i.img for i in list(Image.objects.filter(review__id=r.id))],
                 "img_count": len([i.img for i in list(Image.objects.filter(review__id=r.id))]),
                 "state":r.state.state,
-                "done": r.done,
-                "auto_fill": r.auto_fill,
+                "finish_datetime": r.done,                
                 "contents": r.contents,               
                     } for r in data]        
         pg_num = req.GET.get('page', 1)        
@@ -251,6 +249,10 @@ class AboutReview(View):
                 d2 = datetime.strptime(f"{rd} 23:59", '%Y-%m-%d %H:%M')
         rd, rt = random_date(d1, d2).strftime('%Y-%m-%d %H:%M').split(' ')
         s = check_state_from(0)
+        self._client.review_ticket -= 1
+        if self._client.review_ticket < 0:
+            res = BaseJsonFormat(is_success=False, error_msg=f"추가 구매권을 구매하시기 바랍니다.")
+            return HttpResponse(res, content_type="application/json", status=401)            
         try:
             po = Purchase.objects.get(id=purchase_id)
         except Purchase.DoesNotExist:
@@ -262,6 +264,7 @@ class AboutReview(View):
             for k, f in files.items():
                 i = Image(img=f, review=r)
                 i.save()
+        self._client.save()
         res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.")
         return HttpResponse(res, content_type="application/json", status=200)
     

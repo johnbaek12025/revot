@@ -6,13 +6,14 @@ from main.views.registe import AboutPurchase, AboutReview
 from main.views.ticket import AboutTicket
 from main.views.join import JoinPage
 from main.views.login import LogIn, LogOut
+from main.views.login2 import LogIn2
 from main.views.security import LoggedIn, LoggedOut
 
 
 app_name = 'main'
 
 urlpatterns = [    
-    path('', LoggedOut()(LogIn.as_view(http_method_names=['get', 'post'])), name='login'),
+    path('login/', LoggedOut()(LogIn2.as_view(http_method_names=['get', 'post'])), name='login2'),
     path('join/', LoggedOut()(JoinPage.as_view(http_method_names=['get', 'post'])), name='join'),
     path('logout/', LoggedIn()(LogOut.as_view(http_method_names=['get'])), name='logout'),
     path('mypage/', LoggedIn()(MyPage.as_view(http_method_names=['get'])), name='mypage'),
@@ -25,6 +26,7 @@ urlpatterns = [
     path('folderpage/<int:folder_id>/', LoggedIn()(FolderPage.as_view(http_method_names=['get'])), name='folder-page'),
     path('user/newfolder/', LoggedIn()(AboutFolder.as_view(http_method_names=['get'])), name='new-folder'),
         
+    path('', LoggedOut()(LogIn.as_view(http_method_names=['get', 'post'])), name='login'),
     path('user/product/count/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='product-count'),
     path('user/product/total/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='total-product'),
     path('user/product/success/', LoggedIn()(AboutProduct.as_view(http_method_names=['get'])), name='success-product'),
