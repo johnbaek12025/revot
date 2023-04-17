@@ -7,11 +7,13 @@ from random import randrange
 
 class BaseJsonFormat:
 
-    def __init__(self, *, msg=None, is_success=True, error_msg=None, data: list = None):
+    def __init__(self, *, msg=None, is_success=True, error_msg=None, data: list = None, data_count = 0):
         self.is_success = is_success
         self.msg = msg
         self.error_msg = error_msg
-        self.data = data        
+        self.data = data
+        if data_count != 0:
+            self.data_count = data_count
 
     def __str__(self):
         return json.dumps(self.__dict__, default=str)

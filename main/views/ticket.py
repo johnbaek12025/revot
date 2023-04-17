@@ -15,6 +15,7 @@ from django.db.models import Q
 class AboutTicket(View):    
     def request_data_about(self, ticket_type, req=None, count_bool=False):
         requests = list(RequestTicket.objects.filter(Q(ticket_type=ticket_type)&Q(user=self._client)).all())
+        data_count = len(requests)
         if not count_bool:            
             data = [r._request_state for r in requests]
             pg_num = req.GET.get('page', 1)        
@@ -22,9 +23,10 @@ class AboutTicket(View):
             paginator = Paginator(data, per_page=sc)
             page_obj = paginator.get_page(pg_num)
             data = list(page_obj.object_list)
-        else:            
+        else:
             data = {"count": len(requests)}
-        return BaseJsonFormat(is_success=True, data=data)
+            data_count=0
+        return BaseJsonFormat(is_success=True, data=data, data_count=data_count)
     
     @ParsedClientView.init_parse
     def get(self, req):

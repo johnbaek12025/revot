@@ -48,7 +48,7 @@ class RequestUserInfo(View):
                 pwd = make_password(pwd1)
             self._client.password = pwd
             self._client.save()
-            res = BaseJsonFormat()
+            res = BaseJsonFormat(is_success=True, msg="비번 변경이 완료 되었습니다.")
         else:
             res = BaseJsonFormat()
         return HttpResponse(res, content_type="application/json", status=200)
@@ -57,7 +57,8 @@ class RequestUserInfo(View):
 
 class AboutProduct(View):    
     def jsonize_specific_data(self, req, q):
-        product_list = list(Product.objects.filter(q))
+        product_list = list(Product.objects.filter(q))        
+        data_count = len(product_list)
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
@@ -86,14 +87,14 @@ class AboutProduct(View):
                                     "img": p.img_url,
                                     "searching_type": p.searching_type,
                                     "option_count": option_count,
-                                    "supplements": supplements_kind,
+                                    "supplements_kind": supplements_kind,
                                     "option_kind": option_kind,
                                 })
         pg_num = req.GET.get('page', 1)        
         sc = req.GET.get('sc', 10)
         paginator = Paginator(products_data, per_page=sc)
         page_obj = paginator.get_page(pg_num)        
-        return BaseJsonFormat(is_success=True, data=list(page_obj.object_list))
+        return BaseJsonFormat(is_success=True, data=list(page_obj.object_list), data_count=data_count)
     
     @ParsedClientView.init_parse
     def get(self, req, p_id=None):
@@ -107,7 +108,7 @@ class AboutProduct(View):
                 f = check_state_from(2)
                 f_count: int = Product.objects.filter(owner=self._client, state=f).count()
             products_data = {"total": s_count + f_count, "success_count": s_count, "fail_count": f_count}
-            res = BaseJsonFormat(is_success=True, data=products_data)          
+            res = BaseJsonFormat(is_success=True, data=products_data)
         elif req.resolver_match.url_name == 'total-product':         
             q = Q(owner=self._client)
             res = self.jsonize_specific_data(req, q)            
@@ -147,25 +148,14 @@ class AboutProduct(View):
                     "supplements_detail": supplements_detail,
                     "searching_type": p.searching_type,
                 }
-                res = BaseJsonFormat(is_success=True, data=data)
+                res = BaseJsonFormat(is_success=True, data=data, data_count=1)
         elif req.resolver_match.url_name == 'search-product':
             query = req.GET.get('q')            
             q = Q(owner=self._client) & Q(name__icontains=query)
-            res = self.jsonize_specific_data(req, q)            
-        elif req.resolver_match.url_name == 'product-delete':
-            try:
-                p = Product.objects.get(id=p_id)
-            except Product.DoesNotExist:
-                err_msg = '비정상 접근입니다.'
-                res = BaseJsonFormat(is_success=False, error_msg=err_msg)
-                return HttpResponse(res, content_type="application/json", status=401)        
-            else:
-                p.delete()
-                p.save()
-            res = BaseJsonFormat(is_success=True, msg='정상으로 삭제 되었습니다.')
+            res = self.jsonize_specific_data(req, q)        
         elif req.resolver_match.url_name == 'product-excel':
             #TODO: make_a_excel_file
-            res = BaseJsonFormat(is_success=True, msg='')
+            res = BaseJsonFormat(is_success=True, msg='작업이 완료 되었습니다.')
         return HttpResponse(res, content_type="application/json", status=200)
     
     @csrf_exempt
@@ -246,7 +236,8 @@ class AboutProduct(View):
 
 class AboutFolder(View):
     def jsonize_specific_data(self, req, q):
-        product_list = list(Product.objects.filter(q))      
+        product_list = list(Product.objects.filter(q))
+        data_count = len(product_list)
         products_data = []
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
@@ -282,7 +273,7 @@ class AboutFolder(View):
         sc = req.GET.get('sc', 10)
         paginator = Paginator(products_data, per_page=sc)
         page_obj = paginator.get_page(pg_num)        
-        return BaseJsonFormat(is_success=True, data=list(page_obj.object_list))
+        return BaseJsonFormat(is_success=True, data=list(page_obj.object_list), data_count=data_count)
     
     @ParsedClientView.init_parse
     def get(self, req, folder_id=None, p_id=None):        
@@ -317,7 +308,7 @@ class AboutFolder(View):
                     "supplements": supplements_detail,
                     "searching_type": p.searching_type,
                 }
-                res = BaseJsonFormat(is_success=True, data=data)
+                res = BaseJsonFormat(is_success=True, data=data, data_count=1)
         elif req.resolver_match.url_name == 'folder-search-product':
             query = req.GET.get('q')
             q = Q(owner=self._client) & Q(name__icontains=query)&Q(folder=folder_id)

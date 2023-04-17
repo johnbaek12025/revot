@@ -35,6 +35,7 @@ class LoginSession(ClientInfoBaseModel):
         return self.account + ' - ' + self.value
     
     
+    
 class DangerousAction(ClientInfoBaseModel):
 
     user = models.ForeignKey('main.User', on_delete=models.CASCADE)
