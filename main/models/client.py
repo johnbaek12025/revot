@@ -34,8 +34,8 @@ class User(models.Model):
     @property
     def _user_data(self):
         if self.higherarchy == 0:
-            return {"id": self.id ,"auth": self.authorization, "name": self.name, "phone":self.phone, "product_ticket": self.purchase_ticket, "review_ticket": self.purchase_ticket, "agency_code": self.agency_code, "recommendation_code": self.recommendation_code, "manager_name": self.authorized_by.name, "manager_phone": self.authorized_by.phone, "self_code": self.self_code}
-        return {"id": self.id ,"auth": self.authorization, "name": self.name, "phone":self.phone, "product_ticket": self.purchase_ticket, "review_ticket": self.purchase_ticket, "agency_code": self.agency_code, "recommendation_code": self.recommendation_code, "self_code": self.self_code}
+            return {"id": self.id ,"auth": self.authorization, "name": self.name, "phone":self.phone, "product_ticket": self.purchase_ticket, "review_ticket": self.purchase_ticket, "agency_code": self.agency_code, "recommendation_code": self.recommendation_code, "manager_name": self.authorized_by.name, "manager_phone": self.authorized_by.phone, "self_code": self.self_code, "display_type": self.display_type}
+        return {"id": self.id ,"auth": self.authorization, "name": self.name, "phone":self.phone, "product_ticket": self.purchase_ticket, "review_ticket": self.purchase_ticket, "agency_code": self.agency_code, "recommendation_code": self.recommendation_code, "self_code": self.self_code, "display_type": self.display_type}
         
     @property
     def _user_data_detail(self):

@@ -2,7 +2,7 @@ from django.urls import path
 from main.models.client import User
 from main.views.clientdata import AboutProduct, RequestUserInfo, AboutFolder
 from main.views.pageviews import FolderPage, MainPage, MainPageGrid, MyPage, PurchaseMainPage, PurchaseSchedulePage, ReviewPage, ReviewSchedulePage
-from main.views.registe import AboutPurchase, AboutReview, Revot
+from main.views.regist import AboutPurchase, AboutReview, Revot
 from main.views.ticket import AboutTicket
 from main.views.join import JoinPage
 from main.views.login import LogIn, LogOut
@@ -61,14 +61,14 @@ urlpatterns = [
     path('request/review/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='review-ticket'),
     path('request/purchase/ticket/delete/', LoggedIn()(AboutTicket.as_view(http_method_names=['delete'])), name='purchase-ticket'),
     
-    path('purchase/count/<str:yr_mon_d>', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-count'),
+    path('purchase/count/<str:yr_mon_d>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-count'),
     path('purchase/state/count/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='state-count'),
     path('history/purchase/<str:yr_mon_d>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='date-purchase'),
     path('history/purchase/<str:yr_mon_d>/info/<str:id>/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='detail'),
     path('purchase/history/total/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
-    path('purchase/history/progress/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
-    path('purchase/history/success/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
-    path('purchase/history/fail/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='total'),
+    path('purchase/history/progress/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='progress'),
+    path('purchase/history/success/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='success'),
+    path('purchase/history/fail/', LoggedIn()(AboutPurchase.as_view(http_method_names=['get'])), name='fail'),
     # path('purchase/update/', LoggedIn()(AboutPurchase.as_view(http_method_names=['put'])), name='purchase-update'),
     path('regist/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['post'])), name='purchase'),
     path('delete/purchase/', LoggedIn()(AboutPurchase.as_view(http_method_names=['delete'])), name='delete-purchase'),
@@ -82,7 +82,7 @@ urlpatterns = [
     path('review/history/success/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='success'),
     path('review/history/fail/', LoggedIn()(AboutReview.as_view(http_method_names=['get'])), name='fail'),
     # path('review/update/', LoggedIn()(AboutReview.as_view(http_method_names=['put'])), name='review-update'),
-    path('registe/review/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review'),
+    path('regist/review/', LoggedIn()(AboutReview.as_view(http_method_names=['post'])), name='review'),
     path('delete/review/', LoggedIn()(AboutReview.as_view(http_method_names=['delete'])), name='delete-purchase'),
-    path('fetch/review/contents', LoggedIn()(Revot.as_view(http_method_names=['post'])), name='revot')
+    path('fetch/review/contents/', LoggedIn()(Revot.as_view(http_method_names=['post'])), name='revot')
 ]

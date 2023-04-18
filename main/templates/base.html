@@ -17,13 +17,18 @@
     <div class="wrap">
         <div class="sidebar">
             <div class="sidebar_logo">
-                <img src="{%static 'img/logo.svg'%}" alt=""><span>Rocket Engine LJ</span>
+                {%if display_type == 1%}
+                    <a href="{%url 'main:main'%}"><img src="{%static 'img/logo.svg'%}" alt=""><span>Rocket Engine LJ</span></a>
+                {%elif display_type == 0%}                        
+                    <a href="{%url 'main:main-grid'%}"><img src="{%static 'img/logo.svg'%}" alt=""><span>Rocket Engine LJ</span></a>
+                {%endif%}
             </div>
             <ul class="sidebar_menu">
                 <li class="on">
-                    {%if display_type == 1%}                    
+                    {{display_type}}
+                    {%if display_type == 1%}
                         <a href="{%url 'main:main'%}"><img src="{%static 'img/i_main.svg'%}" alt="메인">메인</a>
-                    {%elif display_type == 0%}
+                    {%elif display_type == 0%}                        
                         <a href="{%url 'main:main-grid'%}"><img src="{%static 'img/i_main.svg'%}" alt="메인">메인</a>
                     {%endif%}
                     <a href="{%url 'main:mypage'%}"><img src="{%static 'img/i_tasks.svg'%}" alt="내정보">내정보</a>

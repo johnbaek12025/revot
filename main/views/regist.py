@@ -6,6 +6,7 @@ from django.views import View
 from main.commonutility import BaseJsonFormat, check_state_from, random_date, to_bool
 from main.models.client import Product
 from main.models.pseudo import Image, Purchase, Review
+from main.views.revot import BringContents
 from main.views.security import ParsedClientView
 from datetime import datetime
 from django.db.models import Count
@@ -16,7 +17,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 
 
-class AboutPurchase(View):    
+class AboutPurchase(View):
+    @ParsedClientView.init_parse
     def make_pagination(self, req, data:list):
         data = [{
                     "id": p.id,
@@ -28,32 +30,30 @@ class AboutPurchase(View):
                     "mid2": p.product.mid2, 
                     "state":p.state.state, 
                     "count": p.count,
-                    "finish_datetime": p.done,
+                    "finished_count": Purchase.objects.filter(Q(product__owner=self._client)&Q(product__name=p.product.name)).exclude(done__isnull=True).count(),
+                    "finished_date": p.done,
                     "price": int(p.product.price) * p.count,
                     "options": json.loads(p.selected_options),                    
                     "option_count": json.loads(p.product.options)['option_count'],
-                    } for p in data]
-        data_count = len(data)        
+                    } for p in data]        
         pg_num = req.GET.get('page', 1)        
         sc = req.GET.get('sc', 10)
         paginator = Paginator(data, per_page=sc)
         page_obj = paginator.get_page(pg_num)
         data = list(page_obj.object_list)
-        if req.resolver_match.url_name == 'detail':
-            data = data[0]
-            data_count = 0        
-        res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=data, data_count=data_count)       
-        return res
+        return data
     
     @ParsedClientView.init_parse
     def get(self, req, id=None, yr_mon_d=None):
         print(yr_mon_d)
         if req.resolver_match.url_name == 'date-purchase':
-            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon_d)).select_related('product'))
-            res = self.make_pagination(req, purchase_list)
+            purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon_d)).select_related('product'))            
+            data = self.make_pagination(req, purchase_list)
+            res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=data, data_count=len(purchase_list))
         elif req.resolver_match.url_name == 'detail':            
             purchase_list= list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date=yr_mon_d)&Q(id=int(id))).select_related('product'))
-            res = self.make_pagination(req, purchase_list)
+            data = self.make_pagination(req, purchase_list)
+            res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=data, data_count=len(purchase_list))
         elif req.resolver_match.url_name == 'date-count':
             if len(yr_mon_d) < 8:
                 data = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(reservation_date__contains=yr_mon_d)).values('reservation_date', state_name=F('state__state')).annotate(count=Count('id')))
@@ -71,8 +71,8 @@ class AboutPurchase(View):
             res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=data)
         elif req.resolver_match.url_name == 'total':            
             purchase_list = list(Purchase.objects.filter(product__owner=self._client))            
-            print(purchase_list)
-            res = self.make_pagination(req, purchase_list)
+            data = self.make_pagination(req, purchase_list)            
+            res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=data, data_count=len(purchase_list))
         elif req.resolver_match.url_name == 'success':            
             s = check_state_from(1)            
             purchase_list = list(Purchase.objects.filter(Q(product__owner=self._client)&Q(state=s)))            
@@ -182,7 +182,8 @@ class AboutReview(View):
                 "img": [i.img for i in list(Image.objects.filter(review__id=r.id))],
                 "img_count": len([i.img for i in list(Image.objects.filter(review__id=r.id))]),
                 "state":r.state.state,
-                "finish_datetime": r.done,                
+                "stars": r.star,
+                "finished_date": r.done,                
                 "contents": r.contents,               
                     } for r in data]
         data_count = len(data)
@@ -321,6 +322,7 @@ class Revot(View):
     def post(self, req):
         data = json.loads(req.body.decode('utf-8'))        
         purchase_id = int(data['id'])        
+        print(purchase_id)
         try:
             p_data = Purchase.objects.get(id=purchase_id)
         except Purchase.DoesNotExist:
@@ -339,7 +341,8 @@ class Revot(View):
         print(options)
         msg = {"flag": True, "detail": {"p_name": f"{p_name}, {m_name}", "options": options}}
         print(msg)
-        # bc = BringContents(msg=msg)
-        # contents = bc.main()
-        res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=msg)
+        bc = BringContents(msg=msg)
+        contents = bc.main()
+        print(contents)
+        res = BaseJsonFormat(is_success=True, msg=f"작업이 완료 되었습니다.", data=contents)
         return HttpResponse(res, content_type="application/json", status=200)    

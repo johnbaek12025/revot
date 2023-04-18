@@ -17,6 +17,7 @@ class MainPage(ParsedClientView):
         elif req.resolver_match.url_name == 'main-grid':
             self._client.display_type = 0
             self._client.save()
+        print(f"asdassasad{context}")
         return render(req, self.template_name, context=context)
 
 class MainPageGrid(MainPage):
