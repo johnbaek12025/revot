@@ -30,7 +30,7 @@ class Review(models.Model):
     def today_date():
         return str(now().date())
     birth = models.DateTimeField(default=now)
-    purchase = models.ForeignKey('main.Purchase', on_delete=models.CASCADE)
+    purchase = models.OneToOneField('main.Purchase', on_delete=models.CASCADE)
     reservation_date = models.CharField(default=today_date, db_index=True, max_length=20)
     reservation_at = models.CharField(max_length=8, db_index=True, null=True)
     done = models.CharField(max_length=20, db_index=True, null=True)

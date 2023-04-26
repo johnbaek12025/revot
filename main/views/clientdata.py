@@ -63,8 +63,7 @@ class AboutProduct(View):
         for p in product_list:
             keywords = [k for k in p.keyword.split(', ')]            
             if p.options:                                                
-                options = json.loads(p.options)
-                option_count = options['option_count']                
+                options = json.loads(p.options)                
                 option_kind = list(options['options'].keys())
                 supplements_kind = options.get('supplements')
                 if supplements_kind:
@@ -73,8 +72,7 @@ class AboutProduct(View):
                 option_kind = []
                 supplements_kind = options.get('supplements')
                 if supplements_kind:
-                    supplements_kind = list(supplements_kind.keys())            
-                option_count = 0
+                    supplements_kind = list(supplements_kind.keys())                            
             products_data.append({
                                     "id": p.id,
                                     "p_name": p.name, 
@@ -85,40 +83,51 @@ class AboutProduct(View):
                                     "mid2": p.mid2,
                                     "pid": p.pid,
                                     "img": p.img_url,
-                                    "searching_type": p.searching_type,
-                                    "option_count": option_count,
+                                    "searching_type": p.searching_type,                                    
                                     "supplements_kind": supplements_kind,
                                     "option_kind": option_kind,
                                 })
         pg_num = req.GET.get('page', 1)        
-        sc = req.GET.get('sc', 10)
-        paginator = Paginator(products_data, per_page=sc)
+        disp_cnt = req.GET.get('sc', 10)
+        paginator = Paginator(products_data, per_page=disp_cnt)
         page_obj = paginator.get_page(pg_num)        
         return BaseJsonFormat(is_success=True, data=list(page_obj.object_list), data_count=data_count)
+        
+    def preprocess(self, options):
+        if not options:
+            return None
+        new_options = {}
+        for i, k in enumerate(options):                    
+            if not options[k]:
+                new_options[i] = f"{k} * "
+            else:
+                options_list = []
+                for v in options[k]:
+                    options_list.append(v)                        
+                new_options[i] = f"{k} * {', '.join(options_list)}"
+        return new_options
     
     @ParsedClientView.init_parse
     def get(self, req, p_id=None):
+        s = check_state_from(1)
+        f = check_state_from(2)
         if req.resolver_match.url_name == 'product-count':
             if not Product.objects.filter(owner=self._client).exists():
                 s_count = 0
                 f_count = 0
             else:
-                s = check_state_from(1)
-                s_count: int = Product.objects.filter(owner=self._client, state=s).count()
-                f = check_state_from(2)
+                s_count: int = Product.objects.filter(owner=self._client, state=s).count()                
                 f_count: int = Product.objects.filter(owner=self._client, state=f).count()
             products_data = {"total": s_count + f_count, "success_count": s_count, "fail_count": f_count}
             res = BaseJsonFormat(is_success=True, data=products_data)
         elif req.resolver_match.url_name == 'total-product':         
             q = Q(owner=self._client)
             res = self.jsonize_specific_data(req, q)            
-        elif req.resolver_match.url_name == 'success-product':
-            s = check_state_from(1)
+        elif req.resolver_match.url_name == 'success-product':            
             q = Q(owner=self._client) & Q(state=s)
             res = self.jsonize_specific_data(req, q)
-        elif req.resolver_match.url_name == 'fail-product':
-            s = check_state_from(2)
-            q = Q(owner=self._client) & Q(state=s)
+        elif req.resolver_match.url_name == 'fail-product':            
+            q = Q(owner=self._client) & Q(state=f)
             res = self.jsonize_specific_data(req, q)        
         elif req.resolver_match.url_name == 'product-detail':
             try:
@@ -128,10 +137,13 @@ class AboutProduct(View):
                 res = BaseJsonFormat(is_success=False, error_msg=err_msg)
                 return HttpResponse(res, content_type="application/json", status=401)        
             else:                
-                options = json.loads(p.options)
-                option_count = options['option_count']
+                options = json.loads(p.options)                
                 option_detail = options['options']  
-                supplements_detail = options.get('supplements')                
+                mund_options = self.preprocess(option_detail)
+                print(f"mund_option: {mund_options}")
+                supplements_detail = options.get('supplements')
+                select_options = self.preprocess(supplements_detail)
+                print(f"select_option: {select_options}")
                 keywords = [k for k in p.keyword.split(', ')]
                 data = {
                     "id": p.id,
@@ -143,9 +155,10 @@ class AboutProduct(View):
                     "mid2": p.mid2,
                     "pid": p.pid,
                     "img": p.img_url,
-                    "option_count": option_count,                    
-                    "option_detail": option_detail,
-                    "supplements_detail": supplements_detail,
+                    "option_count": len(option_detail),
+                    "supplements_count": len(supplements_detail) if supplements_detail else 0,
+                    "option_detail": mund_options,
+                    "supplements_detail": select_options,
                     "searching_type": p.searching_type,
                 }
                 res = BaseJsonFormat(is_success=True, data=data, data_count=1)
@@ -270,8 +283,8 @@ class AboutFolder(View):
                                     "option_kind": option_kind,
                                 })
         pg_num = req.GET.get('page', 1)        
-        sc = req.GET.get('sc', 10)
-        paginator = Paginator(products_data, per_page=sc)
+        disp_cnt = req.GET.get('sc', 10)
+        paginator = Paginator(products_data, per_page=disp_cnt)
         page_obj = paginator.get_page(pg_num)        
         return BaseJsonFormat(is_success=True, data=list(page_obj.object_list), data_count=data_count)
     

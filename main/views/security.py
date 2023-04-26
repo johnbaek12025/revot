@@ -184,10 +184,7 @@ class ParsedClientView(View):
             req = kwargs.get('req', None) or args[1]
             try:
                 client_obj = get_client_object(req=req)
-            except (SessionCookieNonExists, SessionValueWrong):
-                #  # 체커 봇, 랭커 봇인 경우
-                # if 'encoded' in kwargs:
-                #     setattr(instance, '_client', User.objects.filter(is_operator=True)[:1].get())
+            except (SessionCookieNonExists, SessionValueWrong):                
                 res = BaseJsonFormat(is_success=False, error_msg='세션이 없거나 잘못된 세션값입니다.')
                 res = HttpResponse(res, content_type="application/json", status=401)
                 return res
